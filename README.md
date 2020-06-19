@@ -22,6 +22,7 @@
 * Gatsby: version 2.15.36
 * React: version 16.10.2
 * TypeScript: version 3.6.4
+* Tailwindcss: version 1.4.6
 
 ---
 
