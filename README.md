@@ -1,15 +1,22 @@
-# Gatsby Firebase Auth Email
+# Gatsby Firebase Auth
 > This project is a sample application for authentication using Firebase Auth and Gatsby.
-> The authetication will be done using email and password based authentication.
 
 ---
 
 ## Table of contents
+* [General info](#general-info)
 * [Screenshots](#screenshots)
 * [Technologies](#technologies)
 * [Setup](#setup)
 * [Features](#features)
+* [Credits](#credits)
 * [Contact](#contact)
+
+---
+
+## General info
+This project supported the following type of authentication:
+* Email and password based authentication
 
 ---
 
@@ -74,9 +81,17 @@ npm start
 ---
 
 ## Features
-To-do list:
 * Login form to enter the details for authentication
+
+To-do list:
+* Form handler to update and validate form when submit.
 * Notification message to display status of authentication
+
+
+---
+
+## Credits
+* Gatsby starter [gatsby-starter-default-typescript](https://www.gatsbyjs.org/starters/andykenward/gatsby-starter-default-typescript/) by andykenward.
 
 ---
 
