@@ -20,7 +20,8 @@
     "isolatedModules": true,
     // Import non-ES modules as default imports.
     "esModuleInterop": true,
-    "plugins": [{ "transform": "ts-optchain/transform" }]
+    "plugins": [{ "transform": "ts-optchain/transform" }],
+    "skipLibCheck": true
   },
   "include": ["src"]
 }

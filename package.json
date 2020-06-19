@@ -6,6 +6,7 @@
   "author": "Andy Kenward <hello@andykenward.com>",
   "dependencies": {
     "@babel/core": "7.6.4",
+    "eslint-plugin-graphql": "^4.0.0",
     "gatsby": "2.15.36",
     "gatsby-image": "2.2.29",
     "gatsby-plugin-extract-schema": "0.0.5",
@@ -42,10 +43,10 @@
   "scripts": {
     "prebuild": "npm run type-check",
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "develop": "gatsby develop --host 0.0.0.0 --port 8000",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css}'",
     "start": "npm run develop",
-    "serve": "gatsby serve",
+    "serve": "gatsby serve --host 0.0.0.0 --port 9000",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\"",
     "type-check": "tsc --noEmit",
     "type-check:watch": "npm run type-check -- --watch",
