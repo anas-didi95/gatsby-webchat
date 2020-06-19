@@ -2,9 +2,10 @@ import React from "react"
 import FormField from "../components/FormField"
 import Button from "../components/Button"
 import Form from "../components/Form"
+import AppLayout from "../layouts/AppLayout"
 
 const IndexPage: React.FC<{}> = () => (
-  <div className="flex flex-row justify-center items-center h-screen bg-gray-700">
+  <AppLayout>
     <div className="w-full max-w-sm">
       <Form>
         <FormField label="Email" name="email" type="text" />
@@ -17,7 +18,7 @@ const IndexPage: React.FC<{}> = () => (
         &copy;2020 Acme Corp. All rights reserved.
       </p>
     </div>
-  </div>
+  </AppLayout>
 )
 
 export default IndexPage
