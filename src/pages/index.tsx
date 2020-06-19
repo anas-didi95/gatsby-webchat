@@ -1,25 +1,22 @@
-import { Link } from "gatsby"
 import React from "react"
-import Image from "../components/image"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import FormField from "../components/FormField"
+import Button from "../components/Button"
+import Form from "../components/Form"
 
-const IndexPage: React.FC = () => (
-  <div
-    className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-    role="alert">
-    <strong className="font-bold">Holy smokes!</strong>
-    <span className="block sm:inline">Something seriously bad happened.</span>
-    <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
-      <svg
-        className="fill-current h-6 w-6 text-red-500"
-        role="button"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 20 20">
-        <title>Close</title>
-        <path d="M14.348 14.849a1.2 1.2 0 0 1-1.697 0L10 11.819l-2.651 3.029a1.2 1.2 0 1 1-1.697-1.697l2.758-3.15-2.759-3.152a1.2 1.2 0 1 1 1.697-1.697L10 8.183l2.651-3.031a1.2 1.2 0 1 1 1.697 1.697l-2.758 3.152 2.758 3.15a1.2 1.2 0 0 1 0 1.698z" />
-      </svg>
-    </span>
+const IndexPage: React.FC<{}> = () => (
+  <div className="flex flex-row justify-center items-center h-screen bg-gray-700">
+    <div className="w-full max-w-sm">
+      <Form>
+        <FormField label="Email" name="email" type="text" />
+        <FormField label="Password" name="password" type="password" />
+        <div className="flex items-center justify-end">
+          <Button value="Sign In" />
+        </div>
+      </Form>
+      <p className="text-center text-gray-500 text-xs">
+        &copy;2020 Acme Corp. All rights reserved.
+      </p>
+    </div>
   </div>
 )
 
