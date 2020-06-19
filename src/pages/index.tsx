@@ -2,7 +2,7 @@ import React from "react"
 
 const IndexPage: React.FC<{}> = () => (
   <div className="flex flex-row justify-center items-center h-screen bg-gray-700">
-    <div className="w-full max-w-xs">
+    <div className="w-full max-w-sm">
       <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
         <div className="mb-4">
           <label
