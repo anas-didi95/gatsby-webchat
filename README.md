@@ -80,11 +80,11 @@ npm start
 ---
 
 ## Features
-To-do list:
 * Add chat UI
-* Form handler to update and validate form when submit.
-* Notification message to display status of authentication
 
+To-do list:
+* Form handler to submit message.
+* Get list of users from Firestore.
 
 ---
 
