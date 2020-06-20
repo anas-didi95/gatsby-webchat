@@ -3,6 +3,7 @@ import Header from "../components/Header"
 import UserList from "../components/UserList"
 import * as Types from "../utils/types"
 import MessageField from "../components/MessageField"
+import ChatList from "../components/ChatList"
 
 const IndexPage: React.FC<{}> = () => {
   let userList: Types.User[] = [
@@ -64,23 +65,7 @@ const IndexPage: React.FC<{}> = () => {
         <div
           className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
           style={{ height: "80%" }}>
-          {chatList.map((chat, i) => (
-            <React.Fragment key={`chat${i}`}>
-              {chat.isUser ? (
-                <div className="flex justify-end mb-2">
-                  <p className="w-2/5 px-4 py-2 bg-green-200 rounded-md">
-                    {chat.message}
-                  </p>
-                </div>
-              ) : (
-                <div className="flex justify-start mb-2">
-                  <p className="w-2/5 px-4 py-2 bg-white rounded-md">
-                    {chat.message}
-                  </p>
-                </div>
-              )}
-            </React.Fragment>
-          ))}
+          <ChatList chatList={chatList} />
         </div>
         <div className="px-4 py-6 bg-gray-500">
           <MessageField />
