@@ -2,11 +2,11 @@ import React from "react"
 import * as Types from "../utils/types"
 
 const UserList: React.FC<{ userList: Types.User[] }> = ({ userList }) => (
-  <div className="w-3/12 h-full h-screen max-h-screen overflow-scroll">
+  <>
     {userList.map((user, i) => (
       <User key={`user${i}`} user={user} />
     ))}
-  </div>
+  </>
 )
 
 const User: React.FC<{ user: Types.User }> = ({ user }) => (

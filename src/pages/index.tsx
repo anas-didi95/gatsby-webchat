@@ -9,13 +9,31 @@ const IndexPage: React.FC<{}> = () => {
     { name: "Hello 1" },
     { name: "Hello 2" },
     { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
+    { name: "Hello 3" },
   ]
 
   return (
-    <div className="">
-      <Header />
-      <div className="flex max-h-full">
+    <div className="flex">
+      <div className="w-3/12 h-screen max-h-screen overflow-scroll">
         <UserList userList={userList} />
+      </div>
+      <div className="w-9/12 h-screen max-h-screen">
+        <Header />
       </div>
     </div>
   )
