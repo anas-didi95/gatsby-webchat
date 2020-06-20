@@ -5,20 +5,11 @@ import Form from "../components/Form"
 import AppLayout from "../layouts/AppLayout"
 
 const IndexPage: React.FC<{}> = () => (
-  <AppLayout>
-    <div className="w-full max-w-sm">
-      <Form>
-        <FormField label="Email" name="email" type="text" />
-        <FormField label="Password" name="password" type="password" />
-        <div className="flex items-center justify-end">
-          <Button value="Sign In" />
-        </div>
-      </Form>
-      <p className="text-center text-gray-500 text-xs">
-        &copy;2020 Acme Corp. All rights reserved.
-      </p>
-    </div>
-  </AppLayout>
+  <div className="flex px-8 py-4 text-white bg-green-700">
+    <p className="text-3xl">
+      WebChat
+    </p>
+  </div>
 )
 
 export default IndexPage
