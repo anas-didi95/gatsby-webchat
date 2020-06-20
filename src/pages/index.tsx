@@ -1,18 +1,24 @@
 import React from "react"
 import Header from "../components/Header"
+import UserList from "../components/UserList"
+import * as Types from "../utils/types"
 
-const IndexPage: React.FC<{}> = () => (
-  <div className="">
-    <Header />
-    <div className="flex max-h-full">
-      <div className="w-3/12 h-full h-screen max-h-screen overflow-scroll">
-        <div className="px-8 py-4 cursor-pointer hover:bg-gray-300">
-          <p className="text-lg font-semibold">Hello world</p>
-        </div>
-        <hr />
+const IndexPage: React.FC<{}> = () => {
+  let userList: Types.User[] = [
+    { name: "Hello" },
+    { name: "Hello 1" },
+    { name: "Hello 2" },
+    { name: "Hello 3" },
+  ]
+
+  return (
+    <div className="">
+      <Header />
+      <div className="flex max-h-full">
+        <UserList userList={userList} />
       </div>
     </div>
-  </div>
-)
+  )
+}
 
 export default IndexPage
