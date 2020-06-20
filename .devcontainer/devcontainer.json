@@ -16,7 +16,8 @@
   "extensions": [
     "dbaeumer.vscode-eslint",
     "ms-vscode.vscode-typescript-tslint-plugin",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "heybourn.headwind"
   ],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
