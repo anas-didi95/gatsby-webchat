@@ -1,5 +1,5 @@
-# Gatsby Firebase Auth
-> This project is a sample application for authentication using Firebase Auth and Gatsby.
+# Gatsby WebChat
+> This project is a application for web-based chat application using Gatsby and Firebase.
 
 ---
 
@@ -15,8 +15,7 @@
 ---
 
 ## General info
-This project supported the following type of authentication:
-* Email and password based authentication
+This project is using Firebase Firestore to real-time update the chat messages between users.
 
 ---
 
@@ -81,9 +80,8 @@ npm start
 ---
 
 ## Features
-* Login form to enter the details for authentication
-
 To-do list:
+* Add chat UI
 * Form handler to update and validate form when submit.
 * Notification message to display status of authentication
 
