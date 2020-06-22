@@ -4,6 +4,7 @@ import "firebase/auth"
 import SocialLoginButton from "../components/SocialLoginButton"
 import Form from "../components/Form"
 import FormField from "../components/FormField"
+import Button from "../components/Button"
 
 firebase.initializeApp({
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -40,35 +41,10 @@ const LoginPage: React.FC<{}> = () => {
             onClickGoogle={handler.handleGoogleSignIn}
             onClickEmail={handler.handleChooseEmailSignIn}
           />
-          <p className="my-4 text-lg font-bold">
-            {isEmailSignIn ? "Sign In" : "Sign Up"} Form
-          </p>
-          <Form>
-            <FormField name="email" type="email" value="Email" />
-            <FormField name="passowrd" type="password" value="Password" />
-            {!isEmailSignIn ? (
-              <div className="flex items-center justify-end mt-4">
-                <button
-                  className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                  type="button">
-                  Sign Up
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center justify-between mt-4">
-                <button
-                  className="px-4 py-2 text-blue-500 cursor-pointer hover:bg-gray-300"
-                  onClick={handler.handleBack}>
-                  Back
-                </button>
-                <button
-                  className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                  type="button">
-                  Sign In
-                </button>
-              </div>
-            )}
-          </Form>
+          <PageForm
+            isEmailSignIn={isEmailSignIn}
+            handleBack={handler.handleBack}
+          />
         </div>
       </div>
     </div>
@@ -89,5 +65,27 @@ const SocialLoginButtonList: React.FC<{
     )}
   </>
 )
+
+const PageForm: React.FC<{ isEmailSignIn: boolean; handleBack: any }> = ({
+  isEmailSignIn,
+  handleBack,
+}) => {
+  return (
+    <Form title={`${isEmailSignIn ? "Sign In" : "Sign Up"} Form`}>
+      <FormField name="email" type="email" value="Email" />
+      <FormField name="passowrd" type="password" value="Password" />
+      {!isEmailSignIn ? (
+        <div className="flex items-center justify-end mt-4">
+          <Button type="primary" value="Sign Up" onClick={() => {}} />
+        </div>
+      ) : (
+        <div className="flex items-center justify-between mt-4">
+          <Button type="link" value="Back" onClick={handleBack} />
+          <Button type="primary" value="Sign In" onClick={() => {}} />
+        </div>
+      )}
+    </Form>
+  )
+}
 
 export default LoginPage
