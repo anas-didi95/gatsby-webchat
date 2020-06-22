@@ -5,6 +5,9 @@ import SocialLoginButton from "../components/SocialLoginButton"
 import Form from "../components/Form"
 import FormField from "../components/FormField"
 import Button from "../components/Button"
+import { useForm } from "react-hook-form"
+import { oc } from "ts-optchain"
+import { string } from "prop-types"
 
 firebase.initializeApp({
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -43,7 +46,7 @@ const LoginPage: React.FC<{}> = () => {
           />
           <PageForm
             isEmailSignIn={isEmailSignIn}
-            handleBack={handler.handleBack}
+            onClickBack={handler.handleBack}
           />
         </div>
       </div>
@@ -66,21 +69,53 @@ const SocialLoginButtonList: React.FC<{
   </>
 )
 
-const PageForm: React.FC<{ isEmailSignIn: boolean; handleBack: any }> = ({
+const PageForm: React.FC<{ isEmailSignIn: boolean; onClickBack: any }> = ({
   isEmailSignIn,
-  handleBack,
+  onClickBack,
 }) => {
+  type TForm = {
+    email: string
+    password: string
+  }
+  const { register, handleSubmit, errors } = useForm<TForm>()
+
+  const handler = {
+    handleSignUp: (data: TForm) => {
+      console.log("handleSignUp:", data)
+    },
+  }
+
   return (
     <Form title={`${isEmailSignIn ? "Sign In" : "Sign Up"} Form`}>
-      <FormField name="email" type="email" value="Email" />
-      <FormField name="passowrd" type="password" value="Password" />
+      <FormField
+        name="email"
+        type="email"
+        value="Email"
+        register={register({ required: "Email is mandatory field" })}
+        error={oc(errors)
+          .email.message("")
+          .toString()}
+      />
+      <FormField
+        name="password"
+        type="password"
+        value="Password"
+        register={register({ required: "Password is mandatory field" })}
+        error={oc(errors)
+          .password.message("")
+          .toString()}
+      />
       {!isEmailSignIn ? (
         <div className="flex items-center justify-end mt-4">
-          <Button type="primary" value="Sign Up" onClick={() => {}} />
+          <Button
+            type="primary"
+            value="Sign Up"
+            onClick={handleSubmit(handler.handleSignUp)}
+          />
         </div>
       ) : (
         <div className="flex items-center justify-between mt-4">
-          <Button type="link" value="Back" onClick={handleBack} />
+          <Button type="link" value="Back" onClick={onClickBack} />
           <Button type="primary" value="Sign In" onClick={() => {}} />
         </div>
       )}
