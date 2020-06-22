@@ -1,8 +1,7 @@
-import React from "react"
-import { FcGoogle } from "react-icons/fc"
-import { GrMailOption } from "react-icons/gr"
+import React, { useState } from "react"
 import * as firebase from "firebase/app"
 import "firebase/auth"
+import SocialLoginButton from "../components/SocialLoginButton"
 
 firebase.initializeApp({
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -16,6 +15,7 @@ firebase.initializeApp({
 })
 
 const LoginPage: React.FC<{}> = () => {
+  const [isEmailSignIn, setEmailSignIn] = useState(false)
   const googleProvider = new firebase.auth.GoogleAuthProvider()
 
   const handler = {
@@ -25,6 +25,8 @@ const LoginPage: React.FC<{}> = () => {
         .signInWithPopup(googleProvider)
       console.log("userCredential:", userCredential)
     },
+    handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
+    handleBack: () => setEmailSignIn(prev => false),
   }
 
   return (
@@ -35,16 +37,18 @@ const LoginPage: React.FC<{}> = () => {
             Login Form - Login:{" "}
             {!!firebase.auth().currentUser ? "true" : "false"}
           </p>
-          <button
-            className="inline-flex items-center justify-center w-full px-4 py-2 mb-4 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
-            onClick={handler.handleGoogleSignIn}>
-            <FcGoogle />
-            <span className="ml-2 text-black">Sign In with Google</span>
-          </button>
-          <button className="inline-flex items-center justify-center w-full px-4 py-2 mb-4 font-bold text-gray-800 bg-red-300 rounded hover:bg-red-400">
-            <GrMailOption />
-            <span className="ml-2 text-black">Sign In with Email</span>
-          </button>
+          {!isEmailSignIn && (
+            <>
+              <SocialLoginButton
+                type="google"
+                onClick={handler.handleGoogleSignIn}
+              />
+              <SocialLoginButton
+                type="email"
+                onClick={handler.handleChooseEmailSignIn}
+              />
+            </>
+          )}
           <form>
             <div className="mt-4">
               <label
@@ -78,20 +82,28 @@ const LoginPage: React.FC<{}> = () => {
                 Please choose a password.
               </p>
             </div>
-            <div className="flex items-center justify-end mt-4">
-              <button
-                className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
-                type="button">
-                Sign Up
-              </button>
-              {false && (
+            {!isEmailSignIn ? (
+              <div className="flex items-center justify-end mt-4">
                 <button
                   className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                   type="button">
-                  Register
+                  Sign Up
                 </button>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between mt-4">
+                <button
+                  className="px-4 py-2 text-blue-500 cursor-pointer hover:bg-gray-300"
+                  onClick={handler.handleBack}>
+                  Back
+                </button>
+                <button
+                  className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                  type="button">
+                  Sign In
+                </button>
+              </div>
+            )}
           </form>
         </div>
       </div>
