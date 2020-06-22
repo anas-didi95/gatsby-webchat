@@ -33,22 +33,14 @@ const LoginPage: React.FC<{}> = () => {
     <div className="flex flex-col justify-center h-screen bg-gray-200">
       <div className="flex justify-center">
         <div className="w-2/5 px-8 py-6 bg-white border rounded-lg shadow">
-          <p className="mb-4 text-lg font-bold">
-            Login Form - Login:{" "}
-            {!!firebase.auth().currentUser ? "true" : "false"}
+          <SocialLoginButtonList
+            isHide={isEmailSignIn}
+            onClickGoogle={handler.handleGoogleSignIn}
+            onClickEmail={handler.handleChooseEmailSignIn}
+          />
+          <p className="my-4 text-lg font-bold">
+            {isEmailSignIn ? "Sign In" : "Sign Up"} Form
           </p>
-          {!isEmailSignIn && (
-            <>
-              <SocialLoginButton
-                type="google"
-                onClick={handler.handleGoogleSignIn}
-              />
-              <SocialLoginButton
-                type="email"
-                onClick={handler.handleChooseEmailSignIn}
-              />
-            </>
-          )}
           <form>
             <div className="mt-4">
               <label
@@ -110,5 +102,20 @@ const LoginPage: React.FC<{}> = () => {
     </div>
   )
 }
+
+const SocialLoginButtonList: React.FC<{
+  isHide: boolean
+  onClickGoogle: any
+  onClickEmail: any
+}> = ({ isHide, onClickEmail, onClickGoogle }) => (
+  <>
+    {!isHide && (
+      <>
+        <SocialLoginButton type="google" onClick={onClickGoogle} />
+        <SocialLoginButton type="email" onClick={onClickEmail} />
+      </>
+    )}
+  </>
+)
 
 export default LoginPage
