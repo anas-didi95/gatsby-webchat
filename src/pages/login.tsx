@@ -2,6 +2,8 @@ import React, { useState } from "react"
 import * as firebase from "firebase/app"
 import "firebase/auth"
 import SocialLoginButton from "../components/SocialLoginButton"
+import Form from "../components/Form"
+import FormField from "../components/FormField"
 
 firebase.initializeApp({
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -41,39 +43,9 @@ const LoginPage: React.FC<{}> = () => {
           <p className="my-4 text-lg font-bold">
             {isEmailSignIn ? "Sign In" : "Sign Up"} Form
           </p>
-          <form>
-            <div className="mt-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="email">
-                Email
-              </label>
-              <input
-                className="w-full px-3 py-2 mb-3 leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                id="password"
-                type="email"
-                placeholder="******************"
-              />
-              <p className="text-xs italic text-red-500">
-                Please choose a password.
-              </p>
-            </div>
-            <div className="mt-4">
-              <label
-                className="block mb-2 text-sm font-bold text-gray-700"
-                htmlFor="password">
-                Password
-              </label>
-              <input
-                className="w-full px-3 py-2 mb-3 leading-tight text-gray-700 border border-red-500 rounded shadow appearance-none focus:outline-none focus:shadow-outline"
-                id="password"
-                type="password"
-                placeholder="******************"
-              />
-              <p className="text-xs italic text-red-500">
-                Please choose a password.
-              </p>
-            </div>
+          <Form>
+            <FormField name="email" type="email" value="Email" />
+            <FormField name="passowrd" type="password" value="Password" />
             {!isEmailSignIn ? (
               <div className="flex items-center justify-end mt-4">
                 <button
@@ -96,7 +68,7 @@ const LoginPage: React.FC<{}> = () => {
                 </button>
               </div>
             )}
-          </form>
+          </Form>
         </div>
       </div>
     </div>
