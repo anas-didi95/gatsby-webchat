@@ -1,14 +1,43 @@
 import React from "react"
 import { FcGoogle } from "react-icons/fc"
 import { GrMailOption } from "react-icons/gr"
+import * as firebase from "firebase/app"
+import "firebase/auth"
+
+firebase.initializeApp({
+  apiKey: process.env.GATSBY_FIREBASE_API_KEY,
+  authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
+  projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.GATSBY_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.GATSBY_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.GATSBY_FIREBASE_APP_ID,
+  measurementId: process.env.GATSBY_FIREBASE_MEASUREMENT_ID,
+})
 
 const LoginPage: React.FC<{}> = () => {
+  const googleProvider = new firebase.auth.GoogleAuthProvider()
+
+  const handler = {
+    handleGoogleSignIn: async () => {
+      const userCredential = await firebase
+        .auth()
+        .signInWithPopup(googleProvider)
+      console.log("userCredential:", userCredential)
+    },
+  }
+
   return (
     <div className="flex flex-col justify-center h-screen bg-gray-200">
       <div className="flex justify-center">
         <div className="w-2/5 px-8 py-6 bg-white border rounded-lg shadow">
-          <p className="mb-4 text-lg font-bold">Login Form</p>
-          <button className="inline-flex items-center justify-center w-full px-4 py-2 mb-4 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400">
+          <p className="mb-4 text-lg font-bold">
+            Login Form - Login:{" "}
+            {!!firebase.auth().currentUser ? "true" : "false"}
+          </p>
+          <button
+            className="inline-flex items-center justify-center w-full px-4 py-2 mb-4 font-bold text-gray-800 bg-gray-300 rounded hover:bg-gray-400"
+            onClick={handler.handleGoogleSignIn}>
             <FcGoogle />
             <span className="ml-2 text-black">Sign In with Google</span>
           </button>
@@ -49,13 +78,19 @@ const LoginPage: React.FC<{}> = () => {
                 Please choose a password.
               </p>
             </div>
-            <div className="flex items-center justify-between mt-6">
-              <a className="inline-block text-blue-500 cursor-pointer">Back</a>
+            <div className="flex items-center justify-end mt-4">
               <button
                 className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
                 type="button">
-                Sign In
+                Sign Up
               </button>
+              {false && (
+                <button
+                  className="px-4 py-2 font-bold text-white bg-blue-500 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+                  type="button">
+                  Register
+                </button>
+              )}
             </div>
           </form>
         </div>
