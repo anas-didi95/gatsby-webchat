@@ -7,7 +7,6 @@ import FormField from "../components/FormField"
 import Button from "../components/Button"
 import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
-import { string } from "prop-types"
 
 firebase.initializeApp({
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
@@ -19,6 +18,11 @@ firebase.initializeApp({
   appId: process.env.GATSBY_FIREBASE_APP_ID,
   measurementId: process.env.GATSBY_FIREBASE_MEASUREMENT_ID,
 })
+
+type TPageForm = {
+  email: string
+  password: string
+}
 
 const LoginPage: React.FC<{}> = () => {
   const [isEmailSignIn, setEmailSignIn] = useState(false)
@@ -33,6 +37,12 @@ const LoginPage: React.FC<{}> = () => {
     },
     handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
     handleBack: () => setEmailSignIn(prev => false),
+    handleSignUp: (data: TPageForm) => {
+      console.log("handleSignUp:", data)
+    },
+    handleSignIn: (data: TPageForm) => {
+      console.log("handleSignIn:", data)
+    },
   }
 
   return (
@@ -47,6 +57,8 @@ const LoginPage: React.FC<{}> = () => {
           <PageForm
             isEmailSignIn={isEmailSignIn}
             onClickBack={handler.handleBack}
+            onClickSignUp={handler.handleSignUp}
+            onClickSignIn={handler.handleSignIn}
           />
         </div>
       </div>
@@ -69,20 +81,17 @@ const SocialLoginButtonList: React.FC<{
   </>
 )
 
-const PageForm: React.FC<{ isEmailSignIn: boolean; onClickBack: any }> = ({
-  isEmailSignIn,
-  onClickBack,
-}) => {
-  type TForm = {
-    email: string
-    password: string
-  }
-  const { register, handleSubmit, errors } = useForm<TForm>()
+const PageForm: React.FC<{
+  isEmailSignIn: boolean
+  onClickBack: any
+  onClickSignUp: any
+  onClickSignIn: any
+}> = ({ isEmailSignIn, onClickBack, onClickSignUp, onClickSignIn }) => {
+  const { register, handleSubmit, errors } = useForm<TPageForm>()
 
   const handler = {
-    handleSignUp: (data: TForm) => {
-      console.log("handleSignUp:", data)
-    },
+    handleSignUp: handleSubmit(onClickSignUp),
+    handleSignIn: handleSubmit(onClickSignIn),
   }
 
   return (
@@ -110,13 +119,17 @@ const PageForm: React.FC<{ isEmailSignIn: boolean; onClickBack: any }> = ({
           <Button
             type="primary"
             value="Sign Up"
-            onClick={handleSubmit(handler.handleSignUp)}
+            onClick={handler.handleSignUp}
           />
         </div>
       ) : (
         <div className="flex items-center justify-between mt-4">
           <Button type="link" value="Back" onClick={onClickBack} />
-          <Button type="primary" value="Sign In" onClick={() => {}} />
+          <Button
+            type="primary"
+            value="Sign In"
+            onClick={handler.handleSignIn}
+          />
         </div>
       )}
     </Form>
