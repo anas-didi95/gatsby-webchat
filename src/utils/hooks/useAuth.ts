@@ -14,7 +14,7 @@ const useAuth = () => {
     }
   }
 
-  const signUpwithEmailandPassword = async (
+  const signUpwithEmailAndPassword = async (
     email: string,
     password: string
   ) => {
@@ -24,12 +24,30 @@ const useAuth = () => {
         .createUserWithEmailAndPassword(email, password)
       return userCredential
     } catch (e) {
-      console.log("[useAuth] signUpwithEmailandPassword failed!", e)
+      console.error("[useAuth] signUpwithEmailandPassword failed!", e)
       throw e
     }
   }
 
-  return { singInWithGoogle, signUpwithEmailandPassword }
+  const signInWithEmailAndPassword = async (
+    email: string,
+    password: string
+  ) => {
+    try {
+      const userCredential = await app
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+      return userCredential
+    } catch (e) {
+      console.error("[useAuth] signInWithEmailAndPassword failed!", e)
+    }
+  }
+
+  return {
+    singInWithGoogle,
+    signUpwithEmailAndPassword,
+    signInWithEmailAndPassword,
+  }
 }
 
 export default useAuth
