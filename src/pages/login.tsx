@@ -14,6 +14,7 @@ type TPageForm = {
 
 const LoginPage: React.FC<{}> = () => {
   const [isEmailSignIn, setEmailSignIn] = useState(false)
+  const [error, setError] = useState("")
   const {
     singInWithGoogle,
     signUpwithEmailAndPassword,
@@ -23,17 +24,25 @@ const LoginPage: React.FC<{}> = () => {
   const handler = {
     handleGoogleSignIn: async () => {
       const userCredential = await singInWithGoogle()
-      console.log("userCredential:", userCredential)
+      console.log("handleGoogleSignIn", userCredential)
     },
     handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
     handleBack: () => setEmailSignIn(prev => false),
     handleSignUp: async ({ email, password }: TPageForm) => {
-      const userCredential = await signUpwithEmailAndPassword(email, password)
-      console.log("userCredential:", userCredential)
+      try {
+        const userCredential = await signUpwithEmailAndPassword(email, password)
+        console.log("handleSignUp:", userCredential)
+      } catch (e) {
+        setError(e.message)
+      }
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
-      const userCredential = await signInWithEmailAndPassword(email, password)
-      console.log("handleSignIn:", userCredential)
+      try {
+        const userCredential = await signInWithEmailAndPassword(email, password)
+        console.log("handleSignIn:", userCredential)
+      } catch (e) {
+        setError(e.message)
+      }
     },
   }
 
@@ -51,6 +60,7 @@ const LoginPage: React.FC<{}> = () => {
             onClickBack={handler.handleBack}
             onClickSignUp={handler.handleSignUp}
             onClickSignIn={handler.handleSignIn}
+            error={error}
           />
         </div>
       </div>
@@ -78,7 +88,8 @@ const PageForm: React.FC<{
   onClickBack: any
   onClickSignUp: any
   onClickSignIn: any
-}> = ({ isEmailSignIn, onClickBack, onClickSignUp, onClickSignIn }) => {
+  error?: string
+}> = ({ isEmailSignIn, onClickBack, onClickSignUp, onClickSignIn, error }) => {
   const { register, handleSubmit, errors } = useForm<TPageForm>()
 
   const handler = {
@@ -88,6 +99,7 @@ const PageForm: React.FC<{
 
   return (
     <Form title={`${isEmailSignIn ? "Sign In" : "Sign Up"} Form`}>
+      {error && <p className="text-sm italic text-red-500">{error}</p>}
       <FormField
         name="email"
         type="email"
