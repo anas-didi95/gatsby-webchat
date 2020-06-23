@@ -40,6 +40,7 @@ const useAuth = () => {
       return userCredential
     } catch (e) {
       console.error("[useAuth] signInWithEmailAndPassword failed!", e)
+      throw e
     }
   }
 

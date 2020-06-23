@@ -37,8 +37,12 @@ const LoginPage: React.FC<{}> = () => {
       }
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
-      const userCredential = await signInWithEmailAndPassword(email, password)
-      console.log("handleSignIn:", userCredential)
+      try {
+        const userCredential = await signInWithEmailAndPassword(email, password)
+        console.log("handleSignIn:", userCredential)
+      } catch (e) {
+        setError(e.message)
+      }
     },
   }
 
