@@ -14,7 +14,7 @@ type TPageForm = {
 
 const LoginPage: React.FC<{}> = () => {
   const [isEmailSignIn, setEmailSignIn] = useState(false)
-  const { singInWithGoogle } = useAuth()
+  const { singInWithGoogle, signUpwithEmailandPassword } = useAuth()
 
   const handler = {
     handleGoogleSignIn: async () => {
@@ -23,8 +23,9 @@ const LoginPage: React.FC<{}> = () => {
     },
     handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
     handleBack: () => setEmailSignIn(prev => false),
-    handleSignUp: (data: TPageForm) => {
-      console.log("handleSignUp:", data)
+    handleSignUp: async ({ email, password }: TPageForm) => {
+      const userCredential = await signUpwithEmailandPassword(email, password)
+      console.log("userCredential:", userCredential)
     },
     handleSignIn: (data: TPageForm) => {
       console.log("handleSignIn:", data)
