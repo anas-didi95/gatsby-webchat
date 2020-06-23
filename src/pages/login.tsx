@@ -6,6 +6,7 @@ import Button from "../components/Button"
 import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
 import useAuth from "../utils/hooks/useAuth"
+import FormLayout from "../layouts/FormLayout"
 
 type TPageForm = {
   email: string
@@ -47,24 +48,20 @@ const LoginPage: React.FC<{}> = () => {
   }
 
   return (
-    <div className="flex flex-col justify-center h-screen bg-gray-200">
-      <div className="flex justify-center">
-        <div className="w-2/5 px-8 py-6 bg-white border rounded-lg shadow">
-          <SocialLoginButtonList
-            isHide={isEmailSignIn}
-            onClickGoogle={handler.handleGoogleSignIn}
-            onClickEmail={handler.handleChooseEmailSignIn}
-          />
-          <PageForm
-            isEmailSignIn={isEmailSignIn}
-            onClickBack={handler.handleBack}
-            onClickSignUp={handler.handleSignUp}
-            onClickSignIn={handler.handleSignIn}
-            error={error}
-          />
-        </div>
-      </div>
-    </div>
+    <FormLayout>
+      <SocialLoginButtonList
+        isHide={isEmailSignIn}
+        onClickGoogle={handler.handleGoogleSignIn}
+        onClickEmail={handler.handleChooseEmailSignIn}
+      />
+      <PageForm
+        isEmailSignIn={isEmailSignIn}
+        onClickBack={handler.handleBack}
+        onClickSignUp={handler.handleSignUp}
+        onClickSignIn={handler.handleSignIn}
+        error={error}
+      />
+    </FormLayout>
   )
 }
 
