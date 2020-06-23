@@ -1,23 +1,11 @@
 import React, { useState } from "react"
-import * as firebase from "firebase/app"
-import "firebase/auth"
 import SocialLoginButton from "../components/SocialLoginButton"
 import Form from "../components/Form"
 import FormField from "../components/FormField"
 import Button from "../components/Button"
 import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
-
-firebase.initializeApp({
-  apiKey: process.env.GATSBY_FIREBASE_API_KEY,
-  authDomain: process.env.GATSBY_FIREBASE_AUTH_DOMAIN,
-  databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
-  projectId: process.env.GATSBY_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.GATSBY_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.GATSBY_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.GATSBY_FIREBASE_APP_ID,
-  measurementId: process.env.GATSBY_FIREBASE_MEASUREMENT_ID,
-})
+import useAuth from "../utils/hooks/useAuth"
 
 type TPageForm = {
   email: string
@@ -26,13 +14,11 @@ type TPageForm = {
 
 const LoginPage: React.FC<{}> = () => {
   const [isEmailSignIn, setEmailSignIn] = useState(false)
-  const googleProvider = new firebase.auth.GoogleAuthProvider()
+  const { singInWithGoogle } = useAuth()
 
   const handler = {
     handleGoogleSignIn: async () => {
-      const userCredential = await firebase
-        .auth()
-        .signInWithPopup(googleProvider)
+      const userCredential = await singInWithGoogle()
       console.log("userCredential:", userCredential)
     },
     handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
