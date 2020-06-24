@@ -6,8 +6,8 @@ import Button from "../components/Button"
 import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
 import LoaderContext from "../utils/contexts/LoaderContext"
-import FirebaseContext from "../utils/contexts/FirebaseContext"
 import useAuth from "../utils/hooks/useAuth"
+import useFirestore from "../utils/hooks/useFirestore"
 
 type TDetailForm = {
   handleName: string
@@ -16,24 +16,21 @@ type TDetailForm = {
 const WelcomePage: React.FC<{}> = () => {
   const { register, errors, handleSubmit } = useForm<TDetailForm>()
   const { onLoading, offLoading } = useContext(LoaderContext)
-  const { frFirestore } = useContext(FirebaseContext)
   const [error, setError] = useState("")
   const { getCurrentUser } = useAuth()
+  const { setUser } = useFirestore()
 
   const handler = {
     handleButtonSubmit: handleSubmit(async ({ handleName }) => {
       let user = getCurrentUser()
-      console.log("handleButtonSubmit", user)
+      console.log("handleButtonSubmit: user", user)
+      console.log("handleButtonSubmit: handleName", handleName)
       if (user) {
         onLoading()
         try {
-          await frFirestore
-            .collection("users")
-            .doc(oc(user).uid(""))
-            .set({
-              uid: oc(user).uid(""),
-              handleName: handleName,
-            })
+          await setUser(user.uid, {
+            handleName: handleName,
+          })
         } catch (e) {
           setError(e)
         }
@@ -52,7 +49,7 @@ const WelcomePage: React.FC<{}> = () => {
       <Form title="Detail Form">
         {error && <p className="text-sm italic text-red-500">{error}</p>}
         <FormField
-          name="handle"
+          name="handleName"
           type="text"
           value="Handle name"
           error={oc(errors)
