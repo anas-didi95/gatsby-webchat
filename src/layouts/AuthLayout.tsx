@@ -1,14 +1,15 @@
-import React, { ReactNode, useState, useEffect } from "react"
-import useAuth from "../utils/hooks/useAuth"
+import React, { ReactNode, useState, useEffect, useContext } from "react"
 import { navigate } from "gatsby"
+import AuthContext from "../utils/contexts/AuthContext"
 
 const AuthLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isShow, setShow] = useState(false)
-  const { getCurrentUser } = useAuth()
+  const { isLoggedIn } = useContext(AuthContext)
 
   useEffect(() => {
-    const user = getCurrentUser()
-    if (user) {
+    console.log("OK")
+    console.log(isLoggedIn)
+    if (isLoggedIn()) {
       setShow(true)
     } else {
       navigate("/login")
