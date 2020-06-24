@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
 import LoaderContext from "../utils/contexts/LoaderContext"
 import FirebaseContext from "../utils/contexts/FirebaseContext"
+import useAuth from "../utils/hooks/useAuth"
 
 type TDetailForm = {
   handleName: string
@@ -15,18 +16,18 @@ type TDetailForm = {
 const WelcomePage: React.FC<{}> = () => {
   const { register, errors, handleSubmit } = useForm<TDetailForm>()
   const { onLoading, offLoading } = useContext(LoaderContext)
-  const { app } = useContext(FirebaseContext)
+  const { frFirestore } = useContext(FirebaseContext)
   const [error, setError] = useState("")
+  const { getCurrentUser } = useAuth()
 
   const handler = {
     handleButtonSubmit: handleSubmit(async ({ handleName }) => {
-      let user = app.auth().currentUser
+      let user = getCurrentUser()
       console.log("handleButtonSubmit", user)
       if (user) {
         onLoading()
         try {
-          await app
-            .firestore()
+          await frFirestore
             .collection("users")
             .doc(oc(user).uid(""))
             .set({

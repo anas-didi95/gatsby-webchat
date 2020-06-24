@@ -16,14 +16,23 @@ firebase.initializeApp({
 
 const googleProvider = new firebase.auth.GoogleAuthProvider()
 const FirebaseContext = createContext<{
-  app: firebase.app.App
+  frAuth: firebase.auth.Auth
+  frFirestore: firebase.firestore.Firestore
   googleProvider: firebase.auth.GoogleAuthProvider
-}>({ app: firebase.app(), googleProvider: googleProvider })
+}>({
+  frAuth: firebase.auth(),
+  frFirestore: firebase.firestore(),
+  googleProvider: googleProvider,
+})
 
 const FirebaseProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     <FirebaseContext.Provider
-      value={{ app: firebase.app(), googleProvider: googleProvider }}>
+      value={{
+        frAuth: firebase.auth(),
+        frFirestore: firebase.firestore(),
+        googleProvider: googleProvider,
+      }}>
       {children}
     </FirebaseContext.Provider>
   )
