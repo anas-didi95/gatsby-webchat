@@ -1,7 +1,7 @@
 import React from "react"
 
 const FormField: React.FC<{
-  type: "email" | "password"
+  type: "email" | "password" | "text"
   name: string
   value: string
   error?: string
