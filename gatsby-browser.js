@@ -8,10 +8,13 @@
 
 import React from "react"
 import { FirebaseProvider } from "./src/utils/contexts/FirebaseContext"
+import { LoaderProvider } from "./src/utils/contexts/LoaderContext"
 import "./src/styles/app.scss"
 
 export const wrapRootElement = ({ element }) => (
   <FirebaseProvider>
-    {element}
+    <LoaderProvider>
+      {element}
+    </LoaderProvider>
   </FirebaseProvider>
 )

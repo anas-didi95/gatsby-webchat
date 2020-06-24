@@ -1,11 +1,11 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useContext } from "react"
+import Loader from "../components/Loader"
+import LoaderContext from "../utils/contexts/LoaderContext"
 
 const AppLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
-  return (
-    <div className="flex flex-row justify-center items-center h-screen bg-gray-700">
-      {children}
-    </div>
-  )
+  const { isLoading } = useContext(LoaderContext)
+
+  return <>{isLoading ? <Loader /> : children}</>
 }
 
 export default AppLayout
