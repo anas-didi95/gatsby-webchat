@@ -8,6 +8,7 @@ import { oc } from "ts-optchain"
 import useAuth from "../utils/hooks/useAuth"
 import FormLayout from "../layouts/FormLayout"
 import LoaderContext from "../utils/contexts/LoaderContext"
+import { navigate } from "gatsby"
 
 type TPageForm = {
   email: string
@@ -49,13 +50,18 @@ const LoginPage: React.FC<{}> = () => {
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
       onLoading()
+      let hasSignIn = false
       try {
         const userCredential = await signInWithEmailAndPassword(email, password)
         console.log("handleSignIn:", userCredential)
+        hasSignIn = userCredential !== null
       } catch (e) {
         setError(e.message)
       }
       offLoading()
+      if (hasSignIn) {
+        navigate("/welcome")
+      }
     },
   }
 

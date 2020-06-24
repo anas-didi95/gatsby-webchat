@@ -1,6 +1,7 @@
 import React, { createContext, ReactNode } from "react"
 import firebase from "firebase/app"
 import "firebase/auth"
+import "firebase/firestore"
 
 firebase.initializeApp({
   apiKey: process.env.GATSBY_FIREBASE_API_KEY,
