@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import SocialLoginButton from "../components/SocialLoginButton"
 import Form from "../components/Form"
 import FormField from "../components/FormField"
@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
 import useAuth from "../utils/hooks/useAuth"
 import FormLayout from "../layouts/FormLayout"
+import LoaderContext from "../utils/contexts/LoaderContext"
 
 type TPageForm = {
   email: string
@@ -21,29 +22,40 @@ const LoginPage: React.FC<{}> = () => {
     signUpwithEmailAndPassword,
     signInWithEmailAndPassword,
   } = useAuth()
+  const { onLoading, offLoading } = useContext(LoaderContext)
 
   const handler = {
     handleGoogleSignIn: async () => {
-      const userCredential = await singInWithGoogle()
-      console.log("handleGoogleSignIn", userCredential)
+      onLoading()
+      try {
+        const userCredential = await singInWithGoogle()
+        console.log("handleGoogleSignIn", userCredential)
+      } catch (e) {
+        setError(e.message)
+      }
+      offLoading()
     },
     handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
     handleBack: () => setEmailSignIn(prev => false),
     handleSignUp: async ({ email, password }: TPageForm) => {
+      onLoading()
       try {
         const userCredential = await signUpwithEmailAndPassword(email, password)
         console.log("handleSignUp:", userCredential)
       } catch (e) {
         setError(e.message)
       }
+      offLoading()
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
+      onLoading()
       try {
         const userCredential = await signInWithEmailAndPassword(email, password)
         console.log("handleSignIn:", userCredential)
       } catch (e) {
         setError(e.message)
       }
+      offLoading()
     },
   }
 
