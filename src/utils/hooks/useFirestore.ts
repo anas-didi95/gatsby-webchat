@@ -19,7 +19,10 @@ const useFirestore = () => {
 
   const getUser = async (uid: string) => {
     try {
-      const user = await frFirestore.collection("users").doc(uid).get()
+      const user = await frFirestore
+        .collection("users")
+        .doc(uid)
+        .get()
       return user
     } catch (e) {
       console.error("[useFirestore] getUser failed!", e)

@@ -4,11 +4,11 @@ import FirebaseContext from "./FirebaseContext"
 import useFirestore from "../hooks/useFirestore"
 
 const defauttUser: Types.User = {
-  handleName: ""
+  handleName: "",
 }
 
 const AuthContext = createContext<{
-  user: Types.User,
+  user: Types.User
   isLoggedIn: { (): boolean }
 }>({ user: defauttUser, isLoggedIn: () => false })
 
@@ -17,24 +17,32 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { frAuth } = useContext(FirebaseContext)
   const { getUser } = useFirestore()
 
-  frAuth.onAuthStateChanged(async (user) => {
-    if (user) {
-      const userFr = await getUser(user.uid)
-      setUser({
-        handleName: userFr.get("handleName")
-      })
+  frAuth.onAuthStateChanged(
+    async user => {
+      if (user) {
+        const userFr = await getUser(user.uid)
+        setUser({
+          handleName: userFr.get("handleName"),
+        })
+      } else {
+        setUser(defauttUser)
+      }
+    },
+    e => {
+      console.log("[AuthProvider] onAuthStateChanged failed!", e)
+      throw e
     }
-  }, e => {
-    console.log("[AuthProvider] onAuthStateChanged failed!", e)
-    throw e
-  })
+  )
 
   const isLoggedIn = () => {
-    console.log("isLoggedIn", !!frAuth.currentUser)
     return !!frAuth.currentUser
   }
 
-  return <AuthContext.Provider value={{ user, isLoggedIn }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ user, isLoggedIn }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
 export default AuthContext

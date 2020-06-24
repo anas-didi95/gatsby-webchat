@@ -7,8 +7,6 @@ const AuthLayout: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { isLoggedIn } = useContext(AuthContext)
 
   useEffect(() => {
-    console.log("OK")
-    console.log(isLoggedIn)
     if (isLoggedIn()) {
       setShow(true)
     } else {
