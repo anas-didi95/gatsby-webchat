@@ -1,33 +1,29 @@
-import React from "react"
+import React, { useContext, useEffect, useState } from "react"
 import Header from "../components/Header"
 import UserList from "../components/UserList"
 import * as Types from "../utils/types"
 import MessageField from "../components/MessageField"
 import ChatList from "../components/ChatList"
 import AppLayout from "../layouts/AppLayout"
+import AuthLayout from "../layouts/AuthLayout"
+import AuthContext from "../utils/contexts/AuthContext"
+import { navigate } from "gatsby"
 
 const IndexPage: React.FC<{}> = () => {
+  const { isNewUser } = useContext(AuthContext)
+  const [isShow, setShow] = useState(false)
+
+  useEffect(() => {
+    console.log("IndexPage effect")
+    if (isNewUser()) {
+      navigate("/welcome")
+    } else {
+      setShow(true)
+    }
+  }, [])
+
   let userList: Types.User[] = [
-    { name: "Hello" },
-    { name: "Hello 1" },
-    { name: "Hello 2" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
-    { name: "Hello 3" },
+    //{ handleName: "Hello" },
   ]
 
   let chatList: Types.Chat[] = [
@@ -55,26 +51,30 @@ const IndexPage: React.FC<{}> = () => {
   ]
 
   return (
-    <AppLayout>
-      <div className="flex">
-        <div className="w-3/12 h-screen overflow-scroll">
-          <UserList userList={userList} />
-        </div>
-        <div className="w-9/12 h-screen">
-          <div>
-            <Header />
+    <AuthLayout>
+      {isShow && (
+        <AppLayout>
+          <div className="flex h-screen">
+            <div className="w-3/12 h-full overflow-scroll">
+              <UserList userList={userList} />
+            </div>
+            <div className="w-9/12 h-full">
+              <div>
+                <Header />
+              </div>
+              <div
+                className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
+                style={{ height: "80%" }}>
+                <ChatList chatList={chatList} />
+              </div>
+              <div className="px-4 py-6 bg-gray-500">
+                <MessageField />
+              </div>
+            </div>
           </div>
-          <div
-            className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
-            style={{ height: "80%" }}>
-            <ChatList chatList={chatList} />
-          </div>
-          <div className="px-4 py-6 bg-gray-500">
-            <MessageField />
-          </div>
-        </div>
-      </div>
-    </AppLayout>
+        </AppLayout>
+      )}
+    </AuthLayout>
   )
 }
 

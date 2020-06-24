@@ -60,7 +60,7 @@ const LoginPage: React.FC<{}> = () => {
       }
       offLoading()
       if (hasSignIn) {
-        navigate("/welcome")
+        navigate("/")
       }
     },
   }
