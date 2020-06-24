@@ -18,12 +18,12 @@ const defauttUser: Types.User = {
 const AuthContext = createContext<{
   user: Types.User
   isLoggedIn: { (): boolean }
-  isNewUser: { (): boolean }
+  isUserLoaded: { (): boolean }
   updateAuth: { (): Promise<void> }
 }>({
   user: defauttUser,
   isLoggedIn: () => false,
-  isNewUser: () => false,
+  isUserLoaded: () => false,
   updateAuth: async () => {},
 })
 
@@ -54,16 +54,16 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return !!frAuth.currentUser
   }
 
-  const isNewUser = () => {
-    return oc(frAuth).currentUser.uid("") !== user.uid
+  const isUserLoaded = () => {
+    return oc(frAuth).currentUser.uid("") === user.uid
   }
 
   const updateAuth = async () => {
     try {
-      const user = await getUser(oc(frAuth).currentUser.uid(""))
+      const frUser = await getUser(oc(frAuth).currentUser.uid(""))
       setUser({
-        handleName: user.get("handleName"),
-        uid: user.get("uid"),
+        handleName: frUser.get("handleName"),
+        uid: frUser.get("uid"),
       })
     } catch (e) {
       console.log("[AuthProvider] updateAuth failed!", e)
@@ -72,7 +72,8 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, isNewUser, updateAuth }}>
+    <AuthContext.Provider
+      value={{ user, isLoggedIn, isUserLoaded, updateAuth }}>
       {children}
     </AuthContext.Provider>
   )

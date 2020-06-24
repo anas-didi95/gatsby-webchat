@@ -10,15 +10,14 @@ import AuthContext from "../utils/contexts/AuthContext"
 import { navigate } from "gatsby"
 
 const IndexPage: React.FC<{}> = () => {
-  const { isNewUser } = useContext(AuthContext)
+  const { isUserLoaded } = useContext(AuthContext)
   const [isShow, setShow] = useState(false)
 
   useEffect(() => {
-    console.log("IndexPage effect")
-    if (isNewUser()) {
-      navigate("/welcome")
-    } else {
+    if (isUserLoaded()) {
       setShow(true)
+    } else {
+      navigate("/login")
     }
   }, [])
 
