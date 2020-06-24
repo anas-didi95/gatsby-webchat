@@ -27,8 +27,6 @@ const WelcomePage: React.FC<{}> = () => {
   const handler = {
     handleButtonSubmit: handleSubmit(async ({ handleName }) => {
       let user = getCurrentUser()
-      console.log("handleButtonSubmit: user", user)
-      console.log("handleButtonSubmit: handleName", handleName)
       if (user) {
         onLoading()
         try {

@@ -36,16 +36,17 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     async user => {
       if (user) {
         const userFr = await getUser(user.uid)
-        setUser({
+        setUser(prev => ({
+          ...prev,
           handleName: userFr.get("handleName"),
           uid: userFr.get("uid"),
-        })
+        }))
       } else {
-        setUser(defauttUser)
+        setUser(prev => defauttUser)
       }
     },
     e => {
-      console.log("[AuthProvider] onAuthStateChanged failed!", e)
+      console.error("[AuthProvider] onAuthStateChanged failed!", e)
       throw e
     }
   )
@@ -58,15 +59,17 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     return oc(frAuth).currentUser.uid("") === user.uid
   }
 
+  const [t, st] = useState()
   const updateAuth = async () => {
     try {
       const frUser = await getUser(oc(frAuth).currentUser.uid(""))
-      setUser({
+      setUser(prev => ({
+        ...prev,
         handleName: frUser.get("handleName"),
         uid: frUser.get("uid"),
-      })
+      }))
     } catch (e) {
-      console.log("[AuthProvider] updateAuth failed!", e)
+      console.error("[AuthProvider] updateAuth failed!", e)
       throw e
     }
   }
