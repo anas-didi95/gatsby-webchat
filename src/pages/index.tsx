@@ -4,6 +4,7 @@ import UserList from "../components/UserList"
 import * as Types from "../utils/types"
 import MessageField from "../components/MessageField"
 import ChatList from "../components/ChatList"
+import AppLayout from "../layouts/AppLayout"
 
 const IndexPage: React.FC<{}> = () => {
   let userList: Types.User[] = [
@@ -54,24 +55,26 @@ const IndexPage: React.FC<{}> = () => {
   ]
 
   return (
-    <div className="flex">
-      <div className="w-3/12 h-screen overflow-scroll">
-        <UserList userList={userList} />
+    <AppLayout>
+      <div className="flex">
+        <div className="w-3/12 h-screen overflow-scroll">
+          <UserList userList={userList} />
+        </div>
+        <div className="w-9/12 h-screen">
+          <div>
+            <Header />
+          </div>
+          <div
+            className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
+            style={{ height: "80%" }}>
+            <ChatList chatList={chatList} />
+          </div>
+          <div className="px-4 py-6 bg-gray-500">
+            <MessageField />
+          </div>
+        </div>
       </div>
-      <div className="w-9/12 h-screen">
-        <div>
-          <Header />
-        </div>
-        <div
-          className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
-          style={{ height: "80%" }}>
-          <ChatList chatList={chatList} />
-        </div>
-        <div className="px-4 py-6 bg-gray-500">
-          <MessageField />
-        </div>
-      </div>
-    </div>
+    </AppLayout>
   )
 }
 
