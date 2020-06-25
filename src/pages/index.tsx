@@ -8,10 +8,14 @@ import AppLayout from "../layouts/AppLayout"
 import AuthLayout from "../layouts/AuthLayout"
 import AuthContext from "../utils/contexts/AuthContext"
 import { navigate } from "gatsby"
+import useAuth from "../utils/hooks/useAuth"
+import LoaderContext from "../utils/contexts/LoaderContext"
 
 const IndexPage: React.FC<{}> = () => {
   const { isUserLoaded } = useContext(AuthContext)
   const [isShow, setShow] = useState(false)
+  const { signOut } = useAuth()
+  const { onLoading, offLoading } = useContext(LoaderContext)
 
   useEffect(() => {
     if (isUserLoaded()) {
@@ -20,6 +24,23 @@ const IndexPage: React.FC<{}> = () => {
       navigate("/login")
     }
   }, [])
+
+  const handler = {
+    handleLogOut: async () => {
+      onLoading()
+      let hasSignOut = false
+      try {
+        await signOut()
+        hasSignOut = true
+      } catch (e) {
+        alert(e.message)
+      }
+      offLoading()
+      if (hasSignOut) {
+        navigate("/login")
+      }
+    },
+  }
 
   let userList: Types.User[] = [
     //{ handleName: "Hello" },
@@ -59,7 +80,7 @@ const IndexPage: React.FC<{}> = () => {
             </div>
             <div className="w-9/12 h-full">
               <div>
-                <Header />
+                <Header handleLogOut={handler.handleLogOut} />
               </div>
               <div
                 className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
