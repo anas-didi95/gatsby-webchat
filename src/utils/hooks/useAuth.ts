@@ -50,11 +50,21 @@ const useAuth = () => {
     return frAuth.currentUser
   }
 
+  const signOut = async () => {
+    try {
+      await frAuth.signOut()
+    } catch (e) {
+      console.error("[useAuth] signOut failed!", e)
+      throw e
+    }
+  }
+
   return {
     singInWithGoogle,
     signUpwithEmailAndPassword,
     signInWithEmailAndPassword,
     getCurrentUser,
+    signOut,
   }
 }
 

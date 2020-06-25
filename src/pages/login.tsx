@@ -28,39 +28,46 @@ const LoginPage: React.FC<{}> = () => {
   const handler = {
     handleGoogleSignIn: async () => {
       onLoading()
+      let hasSignIn = false
       try {
         const userCredential = await singInWithGoogle()
-        console.log("handleGoogleSignIn", userCredential)
+        hasSignIn = !!userCredential
       } catch (e) {
         setError(e.message)
       }
       offLoading()
+      if (hasSignIn) {
+        navigate("/")
+      }
     },
     handleChooseEmailSignIn: () => setEmailSignIn(prev => true),
     handleBack: () => setEmailSignIn(prev => false),
     handleSignUp: async ({ email, password }: TPageForm) => {
       onLoading()
+      let hasSignIn = false
       try {
         const userCredential = await signUpwithEmailAndPassword(email, password)
-        console.log("handleSignUp:", userCredential)
+        hasSignIn = !!userCredential
       } catch (e) {
         setError(e.message)
       }
       offLoading()
+      if (hasSignIn) {
+        navigate("/")
+      }
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
       onLoading()
       let hasSignIn = false
       try {
         const userCredential = await signInWithEmailAndPassword(email, password)
-        console.log("handleSignIn:", userCredential)
-        hasSignIn = userCredential !== null
+        hasSignIn = !!userCredential
       } catch (e) {
         setError(e.message)
       }
       offLoading()
       if (hasSignIn) {
-        navigate("/welcome")
+        navigate("/")
       }
     },
   }

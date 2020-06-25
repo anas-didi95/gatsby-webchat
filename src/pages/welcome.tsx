@@ -9,6 +9,8 @@ import LoaderContext from "../utils/contexts/LoaderContext"
 import useAuth from "../utils/hooks/useAuth"
 import useFirestore from "../utils/hooks/useFirestore"
 import AuthLayout from "../layouts/AuthLayout"
+import { navigate } from "gatsby"
+import AuthContext from "../utils/contexts/AuthContext"
 
 type TDetailForm = {
   handleName: string
@@ -20,23 +22,24 @@ const WelcomePage: React.FC<{}> = () => {
   const [error, setError] = useState("")
   const { getCurrentUser } = useAuth()
   const { setUser } = useFirestore()
+  const { updateAuth } = useContext(AuthContext)
 
   const handler = {
     handleButtonSubmit: handleSubmit(async ({ handleName }) => {
       let user = getCurrentUser()
-      console.log("handleButtonSubmit: user", user)
-      console.log("handleButtonSubmit: handleName", handleName)
       if (user) {
         onLoading()
         try {
           await setUser(user.uid, {
             handleName: handleName,
+            uid: user.uid,
           })
+          await updateAuth()
         } catch (e) {
           setError(e)
         }
         offLoading()
-        console.log("check firebase")
+        navigate("/")
       }
     }),
   }
