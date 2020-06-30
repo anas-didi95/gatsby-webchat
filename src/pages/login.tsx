@@ -57,16 +57,22 @@ const LoginPage: React.FC<{}> = () => {
       }
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
-      onLoading()
+      //onLoading()
       let hasSignIn = false
       try {
+        console.log("start")
         const userCredential = await signInWithEmailAndPassword(email, password)
         hasSignIn = !!userCredential
+        console.log("end")
+        console.log("userCredential", userCredential)
+        console.log("hasSignIn", hasSignIn)
       } catch (e) {
         setError(e.message)
       }
-      offLoading()
+      console.log("here")
+      //offLoading()
       if (hasSignIn) {
+        console.log("inside")
         navigate("/")
       }
     },
@@ -149,15 +155,15 @@ const PageForm: React.FC<{
           />
         </div>
       ) : (
-        <div className="flex items-center justify-between mt-4">
-          <Button type="link" value="Back" onClick={onClickBack} />
-          <Button
-            type="primary"
-            value="Sign In"
-            onClick={handler.handleSignIn}
-          />
-        </div>
-      )}
+          <div className="flex items-center justify-between mt-4">
+            <Button type="link" value="Back" onClick={onClickBack} />
+            <Button
+              type="primary"
+              value="Sign In"
+              onClick={handler.handleSignIn}
+            />
+          </div>
+        )}
     </Form>
   )
 }

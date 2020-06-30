@@ -2,11 +2,11 @@ import { useContext } from "react"
 import FirebaseContext from "../contexts/FirebaseContext"
 
 const useAuth = () => {
-  const { frAuth, googleProvider } = useContext(FirebaseContext)
+  const firebase = useContext(FirebaseContext)
 
   const singInWithGoogle = async () => {
     try {
-      const userCredential = await frAuth.signInWithPopup(googleProvider)
+      const userCredential = await firebase.auth.signInWithPopup(firebase.googleProvider)
       return userCredential
     } catch (e) {
       console.error("[useAuth] singInWithGoogle failed!", e)
@@ -19,7 +19,7 @@ const useAuth = () => {
     password: string
   ) => {
     try {
-      const userCredential = await frAuth.createUserWithEmailAndPassword(
+      const userCredential = await firebase.auth.createUserWithEmailAndPassword(
         email,
         password
       )
@@ -35,7 +35,7 @@ const useAuth = () => {
     password: string
   ) => {
     try {
-      const userCredential = await frAuth.signInWithEmailAndPassword(
+      const userCredential = await firebase.auth.signInWithEmailAndPassword(
         email,
         password
       )
@@ -47,12 +47,12 @@ const useAuth = () => {
   }
 
   const getCurrentUser = () => {
-    return frAuth.currentUser
+    return firebase.auth.currentUser
   }
 
   const signOut = async () => {
     try {
-      await frAuth.signOut()
+      await firebase.auth.signOut()
     } catch (e) {
       console.error("[useAuth] signOut failed!", e)
       throw e
