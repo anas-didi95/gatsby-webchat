@@ -5,7 +5,6 @@ import MessageField from "../components/MessageField"
 import ChatList from "../components/ChatList"
 import AppLayout from "../layouts/AppLayout"
 import AuthLayout from "../layouts/AuthLayout"
-import AuthContext from "../utils/contexts/AuthContext"
 import { navigate } from "gatsby"
 import useAuth from "../utils/hooks/useAuth"
 import LoaderContext from "../utils/contexts/LoaderContext"
@@ -22,6 +21,10 @@ type TAddChannelForm = {
 const IndexPage: React.FC<{}> = () => {
   const { signOut } = useAuth()
   const { onLoading, offLoading } = useContext(LoaderContext)
+  const [channel, setChannel] = useState<Types.Channel>({
+    uid: "",
+    channelName: "",
+  })
 
   const handler = {
     handleLogOut: async () => {
@@ -38,6 +41,7 @@ const IndexPage: React.FC<{}> = () => {
         navigate("/login")
       }
     },
+    resetChannel: () => setChannel({ channelName: "", uid: "" }),
   }
 
   let userList: Types.User[] = [
@@ -73,11 +77,17 @@ const IndexPage: React.FC<{}> = () => {
       <AppLayout>
         <div className="flex h-screen">
           <div className="w-3/12 h-full overflow-scroll">
-            <ChannelList />
+            <ChannelList
+              setChannel={setChannel}
+              resetChannel={handler.resetChannel}
+            />
           </div>
           <div className="w-9/12 h-full">
             <div>
-              <Header handleLogOut={handler.handleLogOut} />
+              <Header
+                handleLogOut={handler.handleLogOut}
+                channelName={channel.channelName}
+              />
             </div>
             <div
               className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
@@ -94,14 +104,24 @@ const IndexPage: React.FC<{}> = () => {
   )
 }
 
-const ChannelList = () => {
+const ChannelList: React.FC<{
+  setChannel: Function
+  resetChannel: Function
+}> = ({ setChannel, resetChannel }) => {
   const [isAddChannel, setAddChannel] = useState(false)
   const { register, handleSubmit, errors } = useForm<TAddChannelForm>()
   const firestore = useFirestore()
   const [channelList, setChannelList] = useState<Types.Channel[]>([])
+  const [channelIdx, setChannelIdx] = useState<number>(-1)
 
   useEffect(() => {
-    const subscriberChannelList = firestore.listenChannelList(setChannelList)
+    const subscriberChannelList = firestore.listenChannelList(
+      (result: Types.Channel[]) => {
+        setChannelList(result)
+        setChannelIdx(-1)
+        resetChannel()
+      }
+    )
 
     return () => {
       subscriberChannelList()
@@ -118,6 +138,10 @@ const ChannelList = () => {
       }
       setAddChannel(prev => !prev)
     }),
+    handleClickChannel: (i: number) => {
+      setChannelIdx(i)
+      setChannel(channelList[i])
+    },
   }
 
   return (
@@ -163,8 +187,10 @@ const ChannelList = () => {
         channelList.map((channel, i) => (
           <div
             key={`channel${i}`}
-            className="px-8 py-6 border border-b-4 cursor-pointer hover:bg-gray-300"
-            onClick={undefined}>
+            className={`px-8 py-6 border border-b-4 cursor-pointer hover:bg-gray-300 ${
+              i == channelIdx ? "bg-gray-300" : ""
+            }`}
+            onClick={() => handler.handleClickChannel(i)}>
             <p className="font-semibold appearance-none">
               #{channel.channelName}
             </p>

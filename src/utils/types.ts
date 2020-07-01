@@ -10,6 +10,7 @@ export type Chat = {
 
 export type Channel = {
   channelName: string
-  createDate: Date
-  createBy: string
+  uid?: string
+  createDate?: Date
+  createBy?: string
 }
