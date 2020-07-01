@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react"
 import Header from "../components/Header"
-import UserList from "../components/UserList"
 import * as Types from "../utils/types"
 import MessageField from "../components/MessageField"
 import ChatList from "../components/ChatList"
@@ -10,9 +9,17 @@ import AuthContext from "../utils/contexts/AuthContext"
 import { navigate } from "gatsby"
 import useAuth from "../utils/hooks/useAuth"
 import LoaderContext from "../utils/contexts/LoaderContext"
+import FormField from "../components/FormField"
+import Button from "../components/Button"
+import { useForm } from "react-hook-form"
+import { oc } from "ts-optchain"
+import useFirestore from "../utils/hooks/useFirestore"
+
+type TAddChannelForm = {
+  channelName: string
+}
 
 const IndexPage: React.FC<{}> = () => {
-  const { isUserLoaded } = useContext(AuthContext)
   const { signOut } = useAuth()
   const { onLoading, offLoading } = useContext(LoaderContext)
 
@@ -66,7 +73,7 @@ const IndexPage: React.FC<{}> = () => {
       <AppLayout>
         <div className="flex h-screen">
           <div className="w-3/12 h-full overflow-scroll">
-            <UserList userList={userList} />
+            <ChannelList />
           </div>
           <div className="w-9/12 h-full">
             <div>
@@ -84,6 +91,62 @@ const IndexPage: React.FC<{}> = () => {
         </div>
       </AppLayout>
     </AuthLayout>
+  )
+}
+
+const ChannelList = () => {
+  const [isAddChannel, setAddChannel] = useState(false)
+  const { register, handleSubmit, errors } = useForm<TAddChannelForm>()
+  const firestore = useFirestore()
+
+  const handler = {
+    handleToggleChannel: () => setAddChannel(prev => !prev),
+    handleSubmitChannel: handleSubmit(async ({ channelName }) => {
+      try {
+        await firestore.addChannel(channelName)
+      } catch (e) {
+        alert(e.message)
+      }
+      setAddChannel(prev => !prev)
+    }),
+  }
+
+  return (
+    <div
+      className={`px-8 py-6 border border-b-4 ${
+        !isAddChannel ? "hover:bg-gray-300 cursor-pointer" : ""
+      }`}
+      onClick={!isAddChannel ? handler.handleToggleChannel : undefined}>
+      {!isAddChannel ? (
+        <p className="text-lg font-semibold appearance-none">
+          <span className="mr-2">+</span>Add channel
+        </p>
+      ) : (
+        <div>
+          <FormField
+            name="channelName"
+            type="text"
+            value="Channel name"
+            register={register({ required: "Channel name is mandatory field" })}
+            error={oc(errors)
+              .channelName.message("")
+              .toString()}
+          />
+          <div className="flex justify-end mt-4">
+            <Button
+              onClick={handler.handleToggleChannel}
+              type="link"
+              value="Cancel"
+            />
+            <Button
+              onClick={handler.handleSubmitChannel}
+              type="primary"
+              value="Submit"
+            />
+          </div>
+        </div>
+      )}
+    </div>
   )
 }
 

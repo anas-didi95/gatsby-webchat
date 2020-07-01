@@ -30,7 +30,18 @@ const useFirestore = () => {
     }
   }
 
-  return { setUser, getUser }
+  const addChannel = async (channelName: string) => {
+    try {
+      await firebase.firestore.collection("channels").add({
+        channelName: channelName,
+      })
+    } catch (e) {
+      console.error("[useFirestore] addChannel failed!", e)
+      throw e
+    }
+  }
+
+  return { setUser, getUser, addChannel }
 }
 
 export default useFirestore
