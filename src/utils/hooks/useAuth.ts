@@ -6,7 +6,9 @@ const useAuth = () => {
 
   const singInWithGoogle = async () => {
     try {
-      const userCredential = await firebase.auth.signInWithPopup(firebase.googleProvider)
+      const userCredential = await firebase.auth.signInWithPopup(
+        firebase.googleProvider
+      )
       return userCredential
     } catch (e) {
       console.error("[useAuth] singInWithGoogle failed!", e)

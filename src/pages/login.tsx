@@ -150,15 +150,15 @@ const PageForm: React.FC<{
           />
         </div>
       ) : (
-          <div className="flex items-center justify-between mt-4">
-            <Button type="link" value="Back" onClick={onClickBack} />
-            <Button
-              type="primary"
-              value="Sign In"
-              onClick={handler.handleSignIn}
-            />
-          </div>
-        )}
+        <div className="flex items-center justify-between mt-4">
+          <Button type="link" value="Back" onClick={onClickBack} />
+          <Button
+            type="primary"
+            value="Sign In"
+            onClick={handler.handleSignIn}
+          />
+        </div>
+      )}
     </Form>
   )
 }

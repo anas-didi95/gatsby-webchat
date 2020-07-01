@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-} from "react"
+import React, { createContext, useState, useContext, ReactNode } from "react"
 import * as Types from "../types"
 import FirebaseContext from "./FirebaseContext"
 import useFirestore from "../hooks/useFirestore"
@@ -23,7 +18,7 @@ const AuthContext = createContext<{
   user: defauttUser,
   isLoggedIn: () => false,
   isUserLoaded: () => false,
-  updateAuth: async () => { },
+  updateAuth: async () => {},
 })
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
