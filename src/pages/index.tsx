@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import Header from "../components/Header"
 import * as Types from "../utils/types"
 import MessageField from "../components/MessageField"
-import ChatList from "../components/MessageList"
+import MessageList from "../components/MessageList"
 import AppLayout from "../layouts/AppLayout"
 import AuthLayout from "../layouts/AuthLayout"
 import { navigate } from "gatsby"
@@ -27,6 +27,23 @@ const IndexPage: React.FC<{}> = () => {
   })
   const firestore = useFirestore()
   const [message, setMessage] = useState<string>("")
+  const [messageList, setMessageList] = useState<Types.Message[]>([])
+
+  useEffect(() => {
+    let messageListSubscriber: Function = () => {}
+    if (!!channel.uid) {
+      firestore.listenMessageList(
+        oc(channel).uid(""),
+        (result: Types.Message[]) => {
+          setMessageList(result)
+        }
+      )
+    }
+
+    return () => {
+      messageListSubscriber()
+    }
+  }, [channel.uid])
 
   const handler = {
     handleLogOut: async () => {
@@ -103,7 +120,7 @@ const IndexPage: React.FC<{}> = () => {
                 <div
                   className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
                   style={{ height: "80%" }}>
-                  <ChatList chatList={chatList} />
+                  <MessageList messageList={messageList} />
                 </div>
                 <div className="px-4 py-6 bg-gray-500">
                   <MessageField
@@ -166,39 +183,39 @@ const ChannelList: React.FC<{
       <div
         className={`px-8 py-6 border border-b-4 ${
           !isAddChannel ? "hover:bg-gray-300 cursor-pointer" : ""
-          }`}
+        }`}
         onClick={!isAddChannel ? handler.handleToggleChannel : undefined}>
         {!isAddChannel ? (
           <p className="text-lg font-semibold appearance-none">
             <span className="mr-2">+</span>Add channel
           </p>
         ) : (
-            <div>
-              <FormField
-                name="channelName"
-                type="text"
-                value="Channel name"
-                register={register({
-                  required: "Channel name is mandatory field",
-                })}
-                error={oc(errors)
-                  .channelName.message("")
-                  .toString()}
+          <div>
+            <FormField
+              name="channelName"
+              type="text"
+              value="Channel name"
+              register={register({
+                required: "Channel name is mandatory field",
+              })}
+              error={oc(errors)
+                .channelName.message("")
+                .toString()}
+            />
+            <div className="flex justify-end mt-4">
+              <Button
+                onClick={handler.handleToggleChannel}
+                type="link"
+                value="Cancel"
               />
-              <div className="flex justify-end mt-4">
-                <Button
-                  onClick={handler.handleToggleChannel}
-                  type="link"
-                  value="Cancel"
-                />
-                <Button
-                  onClick={handler.handleSubmitChannel}
-                  type="primary"
-                  value="Submit"
-                />
-              </div>
+              <Button
+                onClick={handler.handleSubmitChannel}
+                type="primary"
+                value="Submit"
+              />
             </div>
-          )}
+          </div>
+        )}
       </div>
       {channelList &&
         channelList.map((channel, i) => (
@@ -206,7 +223,7 @@ const ChannelList: React.FC<{
             key={`channel${i}`}
             className={`px-8 py-6 border border-b-4 cursor-pointer hover:bg-gray-300 ${
               i == channelIdx ? "bg-gray-300" : ""
-              }`}
+            }`}
             onClick={() => handler.handleClickChannel(i)}>
             <p className="font-semibold appearance-none">
               #{channel.channelName}

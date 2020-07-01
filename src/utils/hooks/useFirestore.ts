@@ -2,6 +2,7 @@ import { useContext } from "react"
 import FirebaseContext from "../contexts/FirebaseContext"
 import * as Types from "../types"
 import AuthContext from "../contexts/AuthContext"
+import { callbackify } from "util"
 
 const useFirestore = () => {
   const firebase = useContext(FirebaseContext)
@@ -85,7 +86,37 @@ const useFirestore = () => {
     }
   }
 
-  return { setUser, getUser, addChannel, listenChannelList, sendMessage }
+  const listenMessageList = (channelUid: string, callback: Function) => {
+    try {
+      return firebase.firestore
+        .collection("channels")
+        .doc(channelUid)
+        .collection("messages")
+        .orderBy("createDate", "asc")
+        .onSnapshot(docs => {
+          let messageList: Types.Message[] = []
+          docs.forEach(doc => {
+            messageList.push({
+              value: doc.get("value"),
+              createBy: doc.get("createBy"),
+            })
+          })
+          callback(messageList)
+        })
+    } catch (e) {
+      console.error("[useFirestore] listenMessageList failed!", e)
+      throw e
+    }
+  }
+
+  return {
+    setUser,
+    getUser,
+    addChannel,
+    listenChannelList,
+    sendMessage,
+    listenMessageList,
+  }
 }
 
 export default useFirestore
