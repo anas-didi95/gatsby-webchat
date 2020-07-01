@@ -1,7 +1,7 @@
 import React from "react"
 import * as Types from "../utils/types"
 
-const ChatList: React.FC<{ chatList: Types.Chat[] }> = ({ chatList }) => (
+const MessageList: React.FC<{ chatList: Types.Chat[] }> = ({ chatList }) => (
   <>
     {chatList.map((chat, i) => (
       <Chat key={`chat${i}`} chat={chat} />
@@ -14,10 +14,10 @@ const Chat: React.FC<{ chat: Types.Chat }> = ({ chat }) => (
     <p
       className={`w-2/5 px-4 py-2 rounded-md ${
         chat.isUser ? "bg-green-200" : "bg-white"
-      }`}>
+        }`}>
       {chat.message}
     </p>
   </div>
 )
 
-export default ChatList
+export default MessageList
