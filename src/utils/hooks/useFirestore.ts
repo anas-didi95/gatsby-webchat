@@ -46,7 +46,7 @@ const useFirestore = () => {
     }
   }
 
-  const listenChannelList = (setter: Function) => {
+  const listenChannelList = (callback: Function) => {
     try {
       return firebase.firestore
         .collection("channels")
@@ -55,12 +55,11 @@ const useFirestore = () => {
           let channelList: Types.Channel[] = []
           docs.forEach(doc => {
             channelList.push({
+              uid: doc.id,
               channelName: doc.get("channelName"),
-              createBy: doc.get("createBy"),
-              createDate: doc.get("createDate"),
             })
           })
-          setter(channelList)
+          callback(channelList)
         })
     } catch (e) {
       console.error("[useFirestore] listenChannelList failed!", e)
