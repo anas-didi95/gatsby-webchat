@@ -62,7 +62,7 @@ const IndexPage: React.FC<{}> = () => {
   ]
 
   return (
-    <AuthLayout>
+    <AuthLayout userLoaded={true}>
       <AppLayout>
         <div className="flex h-screen">
           <div className="w-3/12 h-full overflow-scroll">

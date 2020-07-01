@@ -20,17 +20,17 @@ const WelcomePage: React.FC<{}> = () => {
   const { register, errors, handleSubmit } = useForm<TDetailForm>()
   const { onLoading, offLoading } = useContext(LoaderContext)
   const [error, setError] = useState("")
-  const { getCurrentUser } = useAuth()
-  const { setUser } = useFirestore()
+  const auth = useAuth()
+  const firestore = useFirestore()
   const { updateAuth } = useContext(AuthContext)
 
   const handler = {
     handleButtonSubmit: handleSubmit(async ({ handleName }) => {
-      let user = getCurrentUser()
+      let user = auth.getCurrentUser()
       if (user) {
         onLoading()
         try {
-          await setUser(user.uid, {
+          await firestore.setUser(user.uid, {
             handleName: handleName,
             uid: user.uid,
           })
@@ -45,7 +45,7 @@ const WelcomePage: React.FC<{}> = () => {
   }
 
   return (
-    <AuthLayout>
+    <AuthLayout userLoaded={false}>
       <FormLayout>
         <p className="text-2xl font-bold">Welcome</p>
         <p className="mt-2 mb-8">

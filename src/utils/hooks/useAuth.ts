@@ -1,14 +1,17 @@
 import { useContext } from "react"
 import FirebaseContext from "../contexts/FirebaseContext"
+import AuthContext from "../contexts/AuthContext"
 
 const useAuth = () => {
   const firebase = useContext(FirebaseContext)
+  const { updateAuth } = useContext(AuthContext)
 
   const singInWithGoogle = async () => {
     try {
       const userCredential = await firebase.auth.signInWithPopup(
         firebase.googleProvider
       )
+      await updateAuth()
       return userCredential
     } catch (e) {
       console.error("[useAuth] singInWithGoogle failed!", e)
@@ -25,6 +28,7 @@ const useAuth = () => {
         email,
         password
       )
+      await updateAuth()
       return userCredential
     } catch (e) {
       console.error("[useAuth] signUpwithEmailandPassword failed!", e)
@@ -41,6 +45,7 @@ const useAuth = () => {
         email,
         password
       )
+      await updateAuth()
       return userCredential
     } catch (e) {
       console.error("[useAuth] signInWithEmailAndPassword failed!", e)
