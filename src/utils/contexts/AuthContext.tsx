@@ -15,11 +15,13 @@ const AuthContext = createContext<{
   isLoggedIn: { (): boolean }
   isUserLoaded: { (): boolean }
   updateAuth: { (): Promise<void> }
+  getUserUid: { (): string }
 }>({
   user: defauttUser,
   isLoggedIn: () => false,
   isUserLoaded: () => false,
   updateAuth: async () => {},
+  getUserUid: () => "",
 })
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
@@ -53,9 +55,13 @@ const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     }
   }
 
+  const getUserUid = () => {
+    return user.uid
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn, isUserLoaded, updateAuth }}>
+      value={{ user, isLoggedIn, isUserLoaded, updateAuth, getUserUid }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,9 +1,11 @@
 import { useContext } from "react"
 import FirebaseContext from "../contexts/FirebaseContext"
 import * as Types from "../types"
+import AuthContext from "../contexts/AuthContext"
 
 const useFirestore = () => {
   const firebase = useContext(FirebaseContext)
+  const { getUserUid } = useContext(AuthContext)
 
   const setUser = async (uid: string, data: Types.User) => {
     try {
@@ -32,9 +34,12 @@ const useFirestore = () => {
 
   const addChannel = async (channelName: string) => {
     try {
-      await firebase.firestore.collection("channels").add({
+      let channel: Types.Channel = {
         channelName: channelName,
-      })
+        createBy: getUserUid(),
+        createDate: new Date(),
+      }
+      await firebase.firestore.collection("channels").add(channel)
     } catch (e) {
       console.error("[useFirestore] addChannel failed!", e)
       throw e
@@ -43,13 +48,20 @@ const useFirestore = () => {
 
   const listenChannelList = (setter: Function) => {
     try {
-      return firebase.firestore.collection("channels").onSnapshot(docs => {
-        let channelList: Types.Channel[] = []
-        docs.forEach(doc => {
-          channelList.push({ channelName: doc.get("channelName") })
+      return firebase.firestore
+        .collection("channels")
+        .orderBy("createDate", "desc")
+        .onSnapshot(docs => {
+          let channelList: Types.Channel[] = []
+          docs.forEach(doc => {
+            channelList.push({
+              channelName: doc.get("channelName"),
+              createBy: doc.get("createBy"),
+              createDate: doc.get("createDate"),
+            })
+          })
+          setter(channelList)
         })
-        setter(channelList)
-      })
     } catch (e) {
       console.error("[useFirestore] listenChannelList failed!", e)
       throw e

@@ -121,41 +121,56 @@ const ChannelList = () => {
   }
 
   return (
-    <div
-      className={`px-8 py-6 border border-b-4 ${
-        !isAddChannel ? "hover:bg-gray-300 cursor-pointer" : ""
-      }`}
-      onClick={!isAddChannel ? handler.handleToggleChannel : undefined}>
-      {!isAddChannel ? (
-        <p className="text-lg font-semibold appearance-none">
-          <span className="mr-2">+</span>Add channel {channelList.length}
-        </p>
-      ) : (
-        <div>
-          <FormField
-            name="channelName"
-            type="text"
-            value="Channel name"
-            register={register({ required: "Channel name is mandatory field" })}
-            error={oc(errors)
-              .channelName.message("")
-              .toString()}
-          />
-          <div className="flex justify-end mt-4">
-            <Button
-              onClick={handler.handleToggleChannel}
-              type="link"
-              value="Cancel"
+    <>
+      <div
+        className={`px-8 py-6 border border-b-4 ${
+          !isAddChannel ? "hover:bg-gray-300 cursor-pointer" : ""
+        }`}
+        onClick={!isAddChannel ? handler.handleToggleChannel : undefined}>
+        {!isAddChannel ? (
+          <p className="text-lg font-semibold appearance-none">
+            <span className="mr-2">+</span>Add channel
+          </p>
+        ) : (
+          <div>
+            <FormField
+              name="channelName"
+              type="text"
+              value="Channel name"
+              register={register({
+                required: "Channel name is mandatory field",
+              })}
+              error={oc(errors)
+                .channelName.message("")
+                .toString()}
             />
-            <Button
-              onClick={handler.handleSubmitChannel}
-              type="primary"
-              value="Submit"
-            />
+            <div className="flex justify-end mt-4">
+              <Button
+                onClick={handler.handleToggleChannel}
+                type="link"
+                value="Cancel"
+              />
+              <Button
+                onClick={handler.handleSubmitChannel}
+                type="primary"
+                value="Submit"
+              />
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+      {channelList &&
+        channelList.map((channel, i) => (
+          <div
+            key={`channel${i}`}
+            className="px-8 py-6 border border-b-4 cursor-pointer hover:bg-gray-300"
+            onClick={undefined}>
+            <p className="font-semibold appearance-none">
+              #{channel.channelName}
+            </p>
+          </div>
+        ))}
+    </>
   )
 }
 
