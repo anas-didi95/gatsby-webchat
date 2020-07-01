@@ -3,6 +3,7 @@ import FirebaseContext from "../contexts/FirebaseContext"
 import * as Types from "../types"
 import AuthContext from "../contexts/AuthContext"
 import { callbackify } from "util"
+import { oc } from "ts-optchain"
 
 const useFirestore = () => {
   const firebase = useContext(FirebaseContext)
@@ -99,8 +100,11 @@ const useFirestore = () => {
             messageList.push({
               value: doc.get("value"),
               createBy: doc.get("createBy"),
+              createDate: doc.get("createDate"),
             })
           })
+          console.log("messageList", messageList)
+          console.log("test", oc(messageList[0]).createDate(new Date()))
           callback(messageList)
         })
     } catch (e) {
