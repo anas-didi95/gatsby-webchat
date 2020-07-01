@@ -98,6 +98,15 @@ const ChannelList = () => {
   const [isAddChannel, setAddChannel] = useState(false)
   const { register, handleSubmit, errors } = useForm<TAddChannelForm>()
   const firestore = useFirestore()
+  const [channelList, setChannelList] = useState<Types.Channel[]>([])
+
+  useEffect(() => {
+    const subscriberChannelList = firestore.listenChannelList(setChannelList)
+
+    return () => {
+      subscriberChannelList()
+    }
+  }, [])
 
   const handler = {
     handleToggleChannel: () => setAddChannel(prev => !prev),
@@ -119,7 +128,7 @@ const ChannelList = () => {
       onClick={!isAddChannel ? handler.handleToggleChannel : undefined}>
       {!isAddChannel ? (
         <p className="text-lg font-semibold appearance-none">
-          <span className="mr-2">+</span>Add channel
+          <span className="mr-2">+</span>Add channel {channelList.length}
         </p>
       ) : (
         <div>

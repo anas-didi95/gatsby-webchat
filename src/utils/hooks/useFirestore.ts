@@ -41,7 +41,22 @@ const useFirestore = () => {
     }
   }
 
-  return { setUser, getUser, addChannel }
+  const listenChannelList = (setter: Function) => {
+    try {
+      return firebase.firestore.collection("channels").onSnapshot(docs => {
+        let channelList: Types.Channel[] = []
+        docs.forEach(doc => {
+          channelList.push({ channelName: doc.get("channelName") })
+        })
+        setter(channelList)
+      })
+    } catch (e) {
+      console.error("[useFirestore] listenChannelList failed!", e)
+      throw e
+    }
+  }
+
+  return { setUser, getUser, addChannel, listenChannelList }
 }
 
 export default useFirestore

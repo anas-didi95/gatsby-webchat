@@ -7,3 +7,7 @@ export type Chat = {
   message: string
   isUser: boolean
 }
+
+export type Channel = {
+  channelName: string
+}
