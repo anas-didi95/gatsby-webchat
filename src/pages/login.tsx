@@ -57,20 +57,15 @@ const LoginPage: React.FC<{}> = () => {
       }
     },
     handleSignIn: async ({ email, password }: TPageForm) => {
-      //onLoading()
+      onLoading()
       let hasSignIn = false
       try {
-        console.log("start")
         const userCredential = await signInWithEmailAndPassword(email, password)
         hasSignIn = !!userCredential
-        console.log("end")
-        console.log("userCredential", userCredential)
-        console.log("hasSignIn", hasSignIn)
       } catch (e) {
         setError(e.message)
       }
-      console.log("here")
-      //offLoading()
+      offLoading()
       if (hasSignIn) {
         console.log("inside")
         navigate("/")
