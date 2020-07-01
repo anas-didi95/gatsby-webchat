@@ -13,17 +13,8 @@ import LoaderContext from "../utils/contexts/LoaderContext"
 
 const IndexPage: React.FC<{}> = () => {
   const { isUserLoaded } = useContext(AuthContext)
-  const [isShow, setShow] = useState(false)
   const { signOut } = useAuth()
   const { onLoading, offLoading } = useContext(LoaderContext)
-
-  useEffect(() => {
-    if (isUserLoaded()) {
-      setShow(true)
-    } else {
-      navigate("/login")
-    }
-  }, [])
 
   const handler = {
     handleLogOut: async () => {
@@ -72,28 +63,26 @@ const IndexPage: React.FC<{}> = () => {
 
   return (
     <AuthLayout>
-      {isShow && (
-        <AppLayout>
-          <div className="flex h-screen">
-            <div className="w-3/12 h-full overflow-scroll">
-              <UserList userList={userList} />
+      <AppLayout>
+        <div className="flex h-screen">
+          <div className="w-3/12 h-full overflow-scroll">
+            <UserList userList={userList} />
+          </div>
+          <div className="w-9/12 h-full">
+            <div>
+              <Header handleLogOut={handler.handleLogOut} />
             </div>
-            <div className="w-9/12 h-full">
-              <div>
-                <Header handleLogOut={handler.handleLogOut} />
-              </div>
-              <div
-                className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
-                style={{ height: "80%" }}>
-                <ChatList chatList={chatList} />
-              </div>
-              <div className="px-4 py-6 bg-gray-500">
-                <MessageField />
-              </div>
+            <div
+              className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
+              style={{ height: "80%" }}>
+              <ChatList chatList={chatList} />
+            </div>
+            <div className="px-4 py-6 bg-gray-500">
+              <MessageField />
             </div>
           </div>
-        </AppLayout>
-      )}
+        </div>
+      </AppLayout>
     </AuthLayout>
   )
 }

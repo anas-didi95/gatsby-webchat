@@ -3,11 +3,11 @@ import FirebaseContext from "../contexts/FirebaseContext"
 import * as Types from "../types"
 
 const useFirestore = () => {
-  const { frFirestore } = useContext(FirebaseContext)
+  const firebase = useContext(FirebaseContext)
 
   const setUser = async (uid: string, data: Types.User) => {
     try {
-      await frFirestore
+      await firebase.firestore
         .collection("users")
         .doc(uid)
         .set(data)
@@ -19,7 +19,7 @@ const useFirestore = () => {
 
   const getUser = async (uid: string) => {
     try {
-      const user = await frFirestore
+      const user = await firebase.firestore
         .collection("users")
         .doc(uid)
         .get()

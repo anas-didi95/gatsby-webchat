@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  ReactNode,
-  useImperativeHandle,
-} from "react"
+import React, { createContext, useState, useContext, ReactNode } from "react"
 import * as Types from "../types"
 import FirebaseContext from "./FirebaseContext"
 import useFirestore from "../hooks/useFirestore"
@@ -29,40 +23,20 @@ const AuthContext = createContext<{
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<Types.User>(defauttUser)
-  const { frAuth } = useContext(FirebaseContext)
+  const firebase = useContext(FirebaseContext)
   const { getUser } = useFirestore()
 
-  frAuth.onAuthStateChanged(
-    async user => {
-      if (user) {
-        const userFr = await getUser(user.uid)
-        setUser(prev => ({
-          ...prev,
-          handleName: userFr.get("handleName"),
-          uid: userFr.get("uid"),
-        }))
-      } else {
-        setUser(prev => defauttUser)
-      }
-    },
-    e => {
-      console.error("[AuthProvider] onAuthStateChanged failed!", e)
-      throw e
-    }
-  )
-
   const isLoggedIn = () => {
-    return !!frAuth.currentUser
+    return true
   }
 
   const isUserLoaded = () => {
-    return oc(frAuth).currentUser.uid("") === user.uid
+    return oc(firebase).auth.currentUser.uid("") === user.uid
   }
 
-  const [t, st] = useState()
   const updateAuth = async () => {
     try {
-      const frUser = await getUser(oc(frAuth).currentUser.uid(""))
+      const frUser = await getUser(oc(firebase).auth.currentUser.uid(""))
       setUser(prev => ({
         ...prev,
         handleName: frUser.get("handleName"),

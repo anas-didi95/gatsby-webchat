@@ -67,6 +67,7 @@ const LoginPage: React.FC<{}> = () => {
       }
       offLoading()
       if (hasSignIn) {
+        console.log("inside")
         navigate("/")
       }
     },
