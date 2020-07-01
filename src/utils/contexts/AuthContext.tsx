@@ -3,6 +3,7 @@ import * as Types from "../types"
 import FirebaseContext from "./FirebaseContext"
 import useFirestore from "../hooks/useFirestore"
 import { oc } from "ts-optchain"
+import useAuth from "../hooks/useAuth"
 
 const defauttUser: Types.User = {
   handleName: "",
@@ -23,25 +24,29 @@ const AuthContext = createContext<{
 
 const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<Types.User>(defauttUser)
-  const firebase = useContext(FirebaseContext)
-  const { getUser } = useFirestore()
+  const auth = useAuth()
+  const firestore = useFirestore()
 
   const isLoggedIn = () => {
-    return true
+    return !!auth.getCurrentUser()
   }
 
   const isUserLoaded = () => {
-    return oc(firebase).auth.currentUser.uid("") === user.uid
+    return oc(auth.getCurrentUser()).uid("") === user.uid
   }
 
   const updateAuth = async () => {
     try {
-      const frUser = await getUser(oc(firebase).auth.currentUser.uid(""))
-      setUser(prev => ({
-        ...prev,
-        handleName: frUser.get("handleName"),
-        uid: frUser.get("uid"),
-      }))
+      const frUser = await firestore.getUser(oc(auth.getCurrentUser()).uid(""))
+      if (frUser) {
+        setUser(prev => ({
+          ...prev,
+          handleName: frUser.get("handleName"),
+          uid: frUser.get("uid"),
+        }))
+      } else {
+        setUser(prev => defauttUser)
+      }
     } catch (e) {
       console.error("[AuthProvider] updateAuth failed!", e)
       throw e
