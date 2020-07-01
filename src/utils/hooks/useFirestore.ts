@@ -67,7 +67,25 @@ const useFirestore = () => {
     }
   }
 
-  return { setUser, getUser, addChannel, listenChannelList }
+  const sendMessage = async (channelUid: string, message: string) => {
+    try {
+      let document: Types.Message = {
+        value: message,
+        createBy: getUserUid(),
+        createDate: new Date(),
+      }
+      await firebase.firestore
+        .collection("channels")
+        .doc(channelUid)
+        .collection("messages")
+        .add(document)
+    } catch (e) {
+      console.error("[useFirestore] sendMessage failed!", e)
+      throw e
+    }
+  }
+
+  return { setUser, getUser, addChannel, listenChannelList, sendMessage }
 }
 
 export default useFirestore

@@ -13,6 +13,7 @@ import Button from "../components/Button"
 import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
 import useFirestore from "../utils/hooks/useFirestore"
+import { firestore } from "firebase"
 
 type TAddChannelForm = {
   channelName: string
@@ -25,6 +26,8 @@ const IndexPage: React.FC<{}> = () => {
     uid: "",
     channelName: "",
   })
+  const firestore = useFirestore()
+  const [message, setMessage] = useState<string>("")
 
   const handler = {
     handleLogOut: async () => {
@@ -42,6 +45,13 @@ const IndexPage: React.FC<{}> = () => {
       }
     },
     resetChannel: () => setChannel({ channelName: "", uid: "" }),
+    handleSendMessage: (
+      e: React.FormEvent<HTMLButtonElement | HTMLFormElement>
+    ) => {
+      e.preventDefault()
+      firestore.sendMessage(oc(channel).uid(""), message)
+      setMessage("")
+    },
   }
 
   let userList: Types.User[] = [
@@ -89,14 +99,22 @@ const IndexPage: React.FC<{}> = () => {
                 channelName={channel.channelName}
               />
             </div>
-            <div
-              className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
-              style={{ height: "80%" }}>
-              <ChatList chatList={chatList} />
-            </div>
-            <div className="px-4 py-6 bg-gray-500">
-              <MessageField />
-            </div>
+            {channel.uid && (
+              <>
+                <div
+                  className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
+                  style={{ height: "80%" }}>
+                  <ChatList chatList={chatList} />
+                </div>
+                <div className="px-4 py-6 bg-gray-500">
+                  <MessageField
+                    onClickSend={handler.handleSendMessage}
+                    setMessage={setMessage}
+                    message={message}
+                  />
+                </div>
+              </>
+            )}
           </div>
         </div>
       </AppLayout>
