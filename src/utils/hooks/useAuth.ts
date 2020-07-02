@@ -8,9 +8,9 @@ const useAuth = () => {
 
   const singInWithGoogle = async () => {
     try {
-      const userCredential = await firebase.auth.signInWithPopup(
-        firebase.googleProvider
-      )
+      const userCredential = await firebase
+        .auth()
+        .signInWithPopup(firebase.googleProvider())
       await updateAuth()
       return userCredential
     } catch (e) {
@@ -24,10 +24,9 @@ const useAuth = () => {
     password: string
   ) => {
     try {
-      const userCredential = await firebase.auth.createUserWithEmailAndPassword(
-        email,
-        password
-      )
+      const userCredential = await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
       await updateAuth()
       return userCredential
     } catch (e) {
@@ -41,10 +40,9 @@ const useAuth = () => {
     password: string
   ) => {
     try {
-      const userCredential = await firebase.auth.signInWithEmailAndPassword(
-        email,
-        password
-      )
+      const userCredential = await firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
       await updateAuth()
       return userCredential
     } catch (e) {
@@ -54,12 +52,12 @@ const useAuth = () => {
   }
 
   const getCurrentUser = () => {
-    return firebase.auth.currentUser
+    return firebase.auth().currentUser
   }
 
   const signOut = async () => {
     try {
-      await firebase.auth.signOut()
+      await firebase.auth().signOut()
     } catch (e) {
       console.error("[useAuth] signOut failed!", e)
       throw e
