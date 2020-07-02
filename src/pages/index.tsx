@@ -87,7 +87,7 @@ const IndexPage: React.FC<{}> = () => {
 
   return (
     <AuthLayout userLoaded={true}>
-      <AppLayout>
+      <AppLayout title="WebChat">
         <div className="flex h-screen">
           <div className="w-3/12 h-full overflow-scroll">
             <ChannelList
