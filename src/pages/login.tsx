@@ -9,6 +9,7 @@ import useAuth from "../utils/hooks/useAuth"
 import FormLayout from "../layouts/FormLayout"
 import LoaderContext from "../utils/contexts/LoaderContext"
 import { navigate } from "gatsby"
+import AppLayout from "../layouts/AppLayout"
 
 type TPageForm = {
   email: string
@@ -73,20 +74,22 @@ const LoginPage: React.FC<{}> = () => {
   }
 
   return (
-    <FormLayout>
-      <SocialLoginButtonList
-        isHide={isEmailSignIn}
-        onClickGoogle={handler.handleGoogleSignIn}
-        onClickEmail={handler.handleChooseEmailSignIn}
-      />
-      <PageForm
-        isEmailSignIn={isEmailSignIn}
-        onClickBack={handler.handleBack}
-        onClickSignUp={handler.handleSignUp}
-        onClickSignIn={handler.handleSignIn}
-        error={error}
-      />
-    </FormLayout>
+    <AppLayout title="Login">
+      <FormLayout>
+        <SocialLoginButtonList
+          isHide={isEmailSignIn}
+          onClickGoogle={handler.handleGoogleSignIn}
+          onClickEmail={handler.handleChooseEmailSignIn}
+        />
+        <PageForm
+          isEmailSignIn={isEmailSignIn}
+          onClickBack={handler.handleBack}
+          onClickSignUp={handler.handleSignUp}
+          onClickSignIn={handler.handleSignIn}
+          error={error}
+        />
+      </FormLayout>
+    </AppLayout>
   )
 }
 

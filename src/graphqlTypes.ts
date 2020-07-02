@@ -4076,3 +4076,17 @@ export type LoaderQuery = (
     )> }
   )> }
 );
+
+export type MetadataQueryVariables = {};
+
+
+export type MetadataQuery = (
+  { __typename?: 'Query' }
+  & { site: Maybe<(
+    { __typename?: 'Site' }
+    & { siteMetadata: Maybe<(
+      { __typename?: 'SiteSiteMetadata' }
+      & Pick<SiteSiteMetadata, 'title' | 'description' | 'author'>
+    )> }
+  )> }
+);
