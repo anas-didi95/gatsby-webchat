@@ -2,8 +2,6 @@ import { useContext } from "react"
 import FirebaseContext from "../contexts/FirebaseContext"
 import * as Types from "../types"
 import AuthContext from "../contexts/AuthContext"
-import { callbackify } from "util"
-import { oc } from "ts-optchain"
 
 const useFirestore = () => {
   const firebase = useContext(FirebaseContext)
@@ -103,12 +101,25 @@ const useFirestore = () => {
               createDate: doc.get("createDate"),
             })
           })
-          console.log("messageList", messageList)
-          console.log("test", oc(messageList[0]).createDate(new Date()))
           callback(messageList)
         })
     } catch (e) {
       console.error("[useFirestore] listenMessageList failed!", e)
+      throw e
+    }
+  }
+
+  const listenUserHandleName = (callback: Function) => {
+    try {
+      return firebase.firestore.collection("users").onSnapshot(docs => {
+        let userHandleName: { [key: string]: string } = {}
+        docs.forEach(doc => {
+          userHandleName[doc.get("uid")] = doc.get("handleName")
+        })
+        callback(userHandleName)
+      })
+    } catch (e) {
+      console.error("[useFirestore] listenUserHandleName failed!", e)
       throw e
     }
   }
@@ -120,6 +131,7 @@ const useFirestore = () => {
     listenChannelList,
     sendMessage,
     listenMessageList,
+    listenUserHandleName,
   }
 }
 

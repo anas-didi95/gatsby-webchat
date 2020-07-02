@@ -28,11 +28,26 @@ const IndexPage: React.FC<{}> = () => {
   const firestore = useFirestore()
   const [message, setMessage] = useState<string>("")
   const [messageList, setMessageList] = useState<Types.Message[]>([])
+  const [userHandleName, setUserHandleName] = useState<{
+    [key: string]: string
+  }>({})
+
+  useEffect(() => {
+    let userHandleNameSubscriber = firestore.listenUserHandleName(
+      (result: { [key: string]: string }) => {
+        setUserHandleName(result)
+      }
+    )
+
+    return () => {
+      userHandleNameSubscriber()
+    }
+  }, [])
 
   useEffect(() => {
     let messageListSubscriber: Function = () => {}
     if (!!channel.uid) {
-      firestore.listenMessageList(
+      messageListSubscriber = firestore.listenMessageList(
         oc(channel).uid(""),
         (result: Types.Message[]) => {
           setMessageList(result)
@@ -70,34 +85,6 @@ const IndexPage: React.FC<{}> = () => {
     },
   }
 
-  let userList: Types.User[] = [
-    //{ handleName: "Hello" },
-  ]
-
-  let chatList: Types.Chat[] = [
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: false },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: false },
-    {
-      message:
-        "Hello world lksajf;saljf;aksjf;lsajf;lksajd ;ajsdf;kjas;fjas;lfdkj akajsd;fkja;f",
-      isUser: true,
-    },
-    { message: "Hello world", isUser: true },
-    {
-      message:
-        "Hello world afasfsadfsafsadfjsaf;lsajf;lsaj as;lfjsa;fjas;lfjsa;lkfjdsa;l as;kjfsa;lkfj  a;sdkjf;lsajfa;skfjsa;ldj ",
-      isUser: false,
-    },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-  ]
-
   return (
     <AuthLayout userLoaded={true}>
       <AppLayout>
@@ -120,7 +107,10 @@ const IndexPage: React.FC<{}> = () => {
                 <div
                   className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
                   style={{ height: "80%" }}>
-                  <MessageList messageList={messageList} />
+                  <MessageList
+                    messageList={messageList}
+                    userHandleName={userHandleName}
+                  />
                 </div>
                 <div className="px-4 py-6 bg-gray-500">
                   <MessageField
