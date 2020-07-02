@@ -9,7 +9,8 @@ const useFirestore = () => {
 
   const setUser = async (uid: string, data: Types.User) => {
     try {
-      await firebase.firestore
+      await firebase
+        .firestore()
         .collection("users")
         .doc(uid)
         .set(data)
@@ -21,7 +22,8 @@ const useFirestore = () => {
 
   const getUser = async (uid: string) => {
     try {
-      const user = await firebase.firestore
+      const user = await firebase
+        .firestore()
         .collection("users")
         .doc(uid)
         .get()
@@ -39,7 +41,10 @@ const useFirestore = () => {
         createBy: getUserUid(),
         createDate: new Date(),
       }
-      await firebase.firestore.collection("channels").add(channel)
+      await firebase
+        .firestore()
+        .collection("channels")
+        .add(channel)
     } catch (e) {
       console.error("[useFirestore] addChannel failed!", e)
       throw e
@@ -48,7 +53,8 @@ const useFirestore = () => {
 
   const listenChannelList = (callback: Function) => {
     try {
-      return firebase.firestore
+      return firebase
+        .firestore()
         .collection("channels")
         .orderBy("createDate", "desc")
         .onSnapshot(docs => {
@@ -74,7 +80,8 @@ const useFirestore = () => {
         createBy: getUserUid(),
         createDate: new Date(),
       }
-      await firebase.firestore
+      await firebase
+        .firestore()
         .collection("channels")
         .doc(channelUid)
         .collection("messages")
@@ -87,7 +94,8 @@ const useFirestore = () => {
 
   const listenMessageList = (channelUid: string, callback: Function) => {
     try {
-      return firebase.firestore
+      return firebase
+        .firestore()
         .collection("channels")
         .doc(channelUid)
         .collection("messages")
@@ -111,13 +119,16 @@ const useFirestore = () => {
 
   const listenUserHandleName = (callback: Function) => {
     try {
-      return firebase.firestore.collection("users").onSnapshot(docs => {
-        let userHandleName: { [key: string]: string } = {}
-        docs.forEach(doc => {
-          userHandleName[doc.get("uid")] = doc.get("handleName")
+      return firebase
+        .firestore()
+        .collection("users")
+        .onSnapshot(docs => {
+          let userHandleName: { [key: string]: string } = {}
+          docs.forEach(doc => {
+            userHandleName[doc.get("uid")] = doc.get("handleName")
+          })
+          callback(userHandleName)
         })
-        callback(userHandleName)
-      })
     } catch (e) {
       console.error("[useFirestore] listenUserHandleName failed!", e)
       throw e
