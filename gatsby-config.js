@@ -1,8 +1,8 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter TypeScript`,
-    description: `Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.`,
-    author: `@andykenward`,
+    title: `WebChat`,
+    description: `Web-based chat application using Gatsby and Firebase`,
+    author: `@anasdidi95`,
   },
   plugins: [
     {
