@@ -1,4 +1,3 @@
 export const convertFirebaseDateToLocaleString = (date: any) => {
-  console.log("here", date)
-  return new Date(date.nanoseconds).toLocaleString()
+  return new Date(date.toMillis()).toLocaleString()
 }
