@@ -1,6 +1,5 @@
-import React, { createContext, useState, useContext, ReactNode } from "react"
+import React, { createContext, useState, ReactNode } from "react"
 import * as Types from "../types"
-import FirebaseContext from "./FirebaseContext"
 import useFirestore from "../hooks/useFirestore"
 import { oc } from "ts-optchain"
 import useAuth from "../hooks/useAuth"
