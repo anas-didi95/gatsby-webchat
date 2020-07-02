@@ -16,11 +16,19 @@
 
 ## General info
 This project is using Firebase Firestore to real-time update the chat messages between users.
+It works by using onSnapshot method to listen the collection of messages, if updated, get latest data and render the messages.
+
+It supported the following authentication methods:
+- Email/Password authentication
+- Google authentication
 
 ---
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
+![Sign up form](./screenshot/01-sign-up-form.png)
+![Sign in form](./screenshot/02-sign-in-form.png)
+![Welcome form](./screenshot/03-welcome-form.png)
+![Index](./screenshot/04-index.png)
 
 ---
 
@@ -29,6 +37,7 @@ This project is using Firebase Firestore to real-time update the chat messages b
 * React: version 16.10.2
 * TypeScript: version 3.6.4
 * Tailwindcss: version 1.4.6
+* firebase": version 7.15.3
 
 ---
 
@@ -80,17 +89,18 @@ npm start
 ---
 
 ## Features
-* Add chat UI
-
-To-do list:
-* Form handler to submit message.
-* Get list of users from Firestore.
+* The user can sign up using their Google account or email/password.
+* The user can enter handle name to be used in the application.
+* The user can add new channel and joining to the channel.
+* The user can submit message to channel which will be send to others in the channel.
+* The user can sign out from the application.
 
 ---
 
 ## Credits
 * Gatsby starter [gatsby-starter-default-typescript](https://www.gatsbyjs.org/starters/andykenward/gatsby-starter-default-typescript/) by andykenward.
 * Icons made by <a href="https://www.flaticon.com/authors/pixel-perfect" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
+* Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
 
 ---
 
