@@ -22,6 +22,8 @@ It supported the following authentication methods:
 - Email/Password authentication
 - Google authentication
 
+Use the following link to access the application: [https://webchat.anasdidi.dev](https://webchat.anasdidi.dev)
+
 ---
 
 ## Screenshots
@@ -37,7 +39,7 @@ It supported the following authentication methods:
 * React: version 16.10.2
 * TypeScript: version 3.6.4
 * Tailwindcss: version 1.4.6
-* firebase": version 7.15.3
+* Firebase: version 7.15.3
 
 ---
 
