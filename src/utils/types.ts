@@ -17,6 +17,6 @@ export type Channel = {
 
 export type Message = {
   value: string
-  createDate?: Date
+  createDate?: Date | any
   createBy?: string
 }

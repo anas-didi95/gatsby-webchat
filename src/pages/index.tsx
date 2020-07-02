@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react"
 import Header from "../components/Header"
 import * as Types from "../utils/types"
 import MessageField from "../components/MessageField"
-import ChatList from "../components/ChatList"
+import MessageList from "../components/MessageList"
 import AppLayout from "../layouts/AppLayout"
 import AuthLayout from "../layouts/AuthLayout"
 import { navigate } from "gatsby"
@@ -13,7 +13,6 @@ import Button from "../components/Button"
 import { useForm } from "react-hook-form"
 import { oc } from "ts-optchain"
 import useFirestore from "../utils/hooks/useFirestore"
-import { firestore } from "firebase"
 
 type TAddChannelForm = {
   channelName: string
@@ -28,6 +27,38 @@ const IndexPage: React.FC<{}> = () => {
   })
   const firestore = useFirestore()
   const [message, setMessage] = useState<string>("")
+  const [messageList, setMessageList] = useState<Types.Message[]>([])
+  const [userHandleName, setUserHandleName] = useState<{
+    [key: string]: string
+  }>({})
+
+  useEffect(() => {
+    let userHandleNameSubscriber = firestore.listenUserHandleName(
+      (result: { [key: string]: string }) => {
+        setUserHandleName(result)
+      }
+    )
+
+    return () => {
+      userHandleNameSubscriber()
+    }
+  }, [])
+
+  useEffect(() => {
+    let messageListSubscriber: Function = () => {}
+    if (!!channel.uid) {
+      messageListSubscriber = firestore.listenMessageList(
+        oc(channel).uid(""),
+        (result: Types.Message[]) => {
+          setMessageList(result)
+        }
+      )
+    }
+
+    return () => {
+      messageListSubscriber()
+    }
+  }, [channel.uid])
 
   const handler = {
     handleLogOut: async () => {
@@ -54,34 +85,6 @@ const IndexPage: React.FC<{}> = () => {
     },
   }
 
-  let userList: Types.User[] = [
-    //{ handleName: "Hello" },
-  ]
-
-  let chatList: Types.Chat[] = [
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: false },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: false },
-    {
-      message:
-        "Hello world lksajf;saljf;aksjf;lsajf;lksajd ;ajsdf;kjas;fjas;lfdkj akajsd;fkja;f",
-      isUser: true,
-    },
-    { message: "Hello world", isUser: true },
-    {
-      message:
-        "Hello world afasfsadfsafsadfjsaf;lsajf;lsaj as;lfjsa;fjas;lfjsa;lkfjdsa;l as;kjfsa;lkfj  a;sdkjf;lsajfa;skfjsa;ldj ",
-      isUser: false,
-    },
-    { message: "Hello world", isUser: true },
-    { message: "Hello world", isUser: true },
-  ]
-
   return (
     <AuthLayout userLoaded={true}>
       <AppLayout>
@@ -104,7 +107,10 @@ const IndexPage: React.FC<{}> = () => {
                 <div
                   className="px-8 py-4 overflow-scroll overflow-x-hidden bg-gray-300"
                   style={{ height: "80%" }}>
-                  <ChatList chatList={chatList} />
+                  <MessageList
+                    messageList={messageList}
+                    userHandleName={userHandleName}
+                  />
                 </div>
                 <div className="px-4 py-6 bg-gray-500">
                   <MessageField
